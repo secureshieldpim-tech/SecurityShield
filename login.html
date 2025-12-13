@@ -7,6 +7,65 @@
     <link rel="stylesheet" href="styles.css">
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <link rel="icon" href="images/favicon.png">
+    <style>
+        .identity-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .identity-box {
+            background-color: var(--card-bg);
+            padding: 3rem;
+            border-radius: 15px;
+            border: 2px solid rgba(0, 217, 255, 0.2);
+            margin-bottom: 2rem;
+        }
+        
+        .identity-button {
+            display: inline-block;
+            width: 100%;
+            padding: 1.2rem;
+            background: var(--gradient-2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+            margin: 0.5rem 0;
+        }
+        
+        .identity-button:hover {
+            transform: scale(1.05);
+        }
+        
+        .identity-button.secondary {
+            background: var(--card-bg);
+            border: 2px solid var(--primary-color);
+        }
+        
+        .feature-list {
+            text-align: left;
+            margin: 2rem 0;
+            padding: 0;
+            list-style: none;
+        }
+        
+        .feature-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-gray);
+        }
+        
+        .user-info {
+            background: var(--gradient-2);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar">
@@ -19,30 +78,107 @@
                 <li><a href="index.html">Inicio</a></li>
                 <li><a href="suscripcion.html">Planes</a></li>
                 <li><a href="login.html" class="active">Iniciar Sesión</a></li>
-                <li><a href="contacto.html" class="active">Contacto</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
             </ul>
         </div>
     </nav>
 
     <section class="auth-section">
         <div class="container">
-            <div id="planNotice" style="display:none;" class="plan-notice">
-                <p>📦 Has seleccionado el plan: <strong id="selectedPlan"></strong></p>
-                <p>Inicia sesión o crea una cuenta para continuar</p>
-            </div>
-
-            <div class="auth-container">
-                <div class="auth-box login-box">
-                    <h2>Iniciar Sesión</h2>
-                    
-                    <div id="loginError" class="alert alert-error" style="display:none;"></div>
+            <!-- Vista cuando NO hay usuario logueado -->
+            <div id="loginView" class="identity-container">
+                <div id="planNotice" style="display:none;" class="plan-notice">
+                    <p>📦 Has seleccionado el plan: <strong id="selectedPlan"></strong></p>
+                    <p>Inicia sesión o crea una cuenta para continuar</p>
                 </div>
 
-                <div class="auth-box register-box">
-                    <h2>Crear Cuenta</h2>
+                <div class="identity-box">
+                    <h1 style="margin-bottom: 1rem;">🔐 Acceso a SecureShield</h1>
+                    <p style="color: var(--text-gray); margin-bottom: 2rem;">
+                        Inicia sesión para acceder a tu panel de control y gestionar tus servicios de seguridad
+                    </p>
                     
-                    <div id="registerError" class="alert alert-error" style="display:none;"></div>
-                    <div id="registerSuccess" class="alert alert-success" style="display:none;"></div>
+                    <button class="identity-button" onclick="netlifyIdentity.open('login')">
+                        🔓 Iniciar Sesión
+                    </button>
+                    
+                    <button class="identity-button secondary" onclick="netlifyIdentity.open('signup')">
+                        ✨ Crear Cuenta Nueva
+                    </button>
+                    
+                    <p style="color: var(--text-gray); margin-top: 2rem; font-size: 0.9rem;">
+                        Al crear una cuenta tendrás acceso a:
+                    </p>
+                    
+                    <ul class="feature-list">
+                        <li>✅ Panel de control personalizado</li>
+                        <li>✅ Sistema de tickets de soporte</li>
+                        <li>✅ Gestión de suscripciones</li>
+                        <li>✅ Informes de auditoría</li>
+                        <li>✅ Acceso a documentación exclusiva</li>
+                    </ul>
+                </div>
+
+                <div class="identity-box">
+                    <h3 style="color: var(--primary-color); margin-bottom: 1rem;">
+                        🛡️ Seguridad de tu Cuenta
+                    </h3>
+                    <p style="color: var(--text-gray); font-size: 0.95rem;">
+                        Utilizamos <strong>Netlify Identity</strong>, un sistema de autenticación seguro y encriptado. 
+                        Tus credenciales están protegidas con los más altos estándares de seguridad.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Vista cuando SÍ hay usuario logueado -->
+            <div id="userView" class="identity-container" style="display:none;">
+                <div class="user-info">
+                    <h1 style="margin-bottom: 0.5rem;">¡Bienvenido de nuevo!</h1>
+                    <p id="userEmail" style="font-size: 1.2rem; margin: 0;"></p>
+                </div>
+
+                <div class="identity-box">
+                    <h2 style="margin-bottom: 2rem;">¿Qué deseas hacer?</h2>
+                    
+                    <a href="soporte.html" class="identity-button" style="text-decoration: none;">
+                        🎫 Ir a Soporte
+                    </a>
+                    
+                    <a href="suscripcion.html" class="identity-button secondary" style="text-decoration: none;">
+                        📦 Ver Planes
+                    </a>
+                    
+                    <a href="contacto.html" class="identity-button secondary" style="text-decoration: none;">
+                        📧 Contactar
+                    </a>
+                    
+                    <button class="identity-button secondary" onclick="handleLogout()" style="margin-top: 2rem; background-color: var(--danger); border-color: var(--danger);">
+                        🚪 Cerrar Sesión
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="why-us" style="padding: 3rem 2rem;">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 2rem;">¿Por qué registrarse?</h2>
+            <div class="features">
+                <div class="feature">
+                    <h3>🔍 Auditorías Personalizadas</h3>
+                    <p>Accede a informes detallados de seguridad de tu infraestructura</p>
+                </div>
+                <div class="feature">
+                    <h3>🎫 Soporte Prioritario</h3>
+                    <p>Sistema de tickets para resolver tus dudas de forma rápida</p>
+                </div>
+                <div class="feature">
+                    <h3>📊 Panel de Control</h3>
+                    <p>Gestiona todos tus servicios desde un único lugar</p>
+                </div>
+                <div class="feature">
+                    <h3>🔒 Historial Seguro</h3>
+                    <p>Accede al historial de auditorías y configuraciones realizadas</p>
                 </div>
             </div>
         </div>
@@ -56,18 +192,10 @@
     </footer>
 
     <script>
-        // Inicializar Netlify Identity Widget
-        if (window.netlifyIdentity) {
-            window.netlifyIdentity.on("init", user => {
-                if (!user) {
-                    window.netlifyIdentity.on("login", user => {
-                        document.location.href = "/admin/";
-                    });
-                }
-            });
-        }
+        // Inicializar Netlify Identity
+        netlifyIdentity.init();
 
-        // Mostrar plan seleccionado si viene de suscripción
+        // Verificar si hay plan seleccionado
         const urlParams = new URLSearchParams(window.location.search);
         const plan = urlParams.get('plan');
         
@@ -77,98 +205,79 @@
             sessionStorage.setItem('selected_plan', plan);
         }
 
-        // Manejo del formulario de registro
-        document.getElementById('registerForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirm_password').value;
-            const errorDiv = document.getElementById('registerError');
-            const successDiv = document.getElementById('registerSuccess');
-            
-            errorDiv.style.display = 'none';
-            successDiv.style.display = 'none';
-            
-            if (password !== confirmPassword) {
-                errorDiv.textContent = 'Las contraseñas no coinciden';
-                errorDiv.style.display = 'block';
-                return;
-            }
-            
-            if (password.length < 8) {
-                errorDiv.textContent = 'La contraseña debe tener al menos 8 caracteres';
-                errorDiv.style.display = 'block';
-                return;
-            }
-            
-            // Obtener datos del formulario
-            const formData = new FormData(e.target);
-            
-            try {
-                // Enviar a Netlify Forms
-                const response = await fetch('/', {
-                    method: 'POST',
-                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                    body: new URLSearchParams(formData).toString()
-                });
-                
-                if (response.ok) {
-                    // Crear usuario en localStorage (simulación)
-                    const userData = {
-                        nombre: formData.get('nombre'),
-                        email: formData.get('email'),
-                        empresa: formData.get('empresa'),
-                        fecha_registro: new Date().toISOString()
-                    };
-                    
-                    // Guardar en localStorage
-                    const users = JSON.parse(localStorage.getItem('secureshield_users') || '[]');
-                    users.push(userData);
-                    localStorage.setItem('secureshield_users', JSON.stringify(users));
-                    
-                    successDiv.textContent = 'Registro exitoso. Ya puedes iniciar sesión.';
-                    successDiv.style.display = 'block';
-                    e.target.reset();
-                } else {
-                    throw new Error('Error al registrar');
-                }
-            } catch (error) {
-                errorDiv.textContent = 'Error al registrar el usuario. Por favor, intenta de nuevo.';
-                errorDiv.style.display = 'block';
-            }
-        });
-
-        // Manejo del formulario de login
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            const errorDiv = document.getElementById('loginError');
-            
-            errorDiv.style.display = 'none';
-            
-            // Buscar usuario en localStorage
-            const users = JSON.parse(localStorage.getItem('secureshield_users') || '[]');
-            const user = users.find(u => u.email === email);
+        // Función para actualizar la UI según el estado de login
+        function updateUI() {
+            const user = netlifyIdentity.currentUser();
+            const loginView = document.getElementById('loginView');
+            const userView = document.getElementById('userView');
             
             if (user) {
-                // Guardar sesión
-                localStorage.setItem('secureshield_user', JSON.stringify(user));
+                // Usuario logueado
+                loginView.style.display = 'none';
+                userView.style.display = 'block';
+                document.getElementById('userEmail').textContent = user.email;
                 
-                // Redirigir según plan seleccionado
+                // Guardar datos del usuario en localStorage para usar en otras páginas
+                const userData = {
+                    email: user.email,
+                    nombre: user.user_metadata?.full_name || user.email.split('@')[0],
+                    id: user.id,
+                    fecha_registro: user.created_at
+                };
+                localStorage.setItem('secureshield_user', JSON.stringify(userData));
+                
+                // Si hay plan seleccionado, redirigir
                 const selectedPlan = sessionStorage.getItem('selected_plan');
                 if (selectedPlan) {
-                    sessionStorage.removeItem('selected_plan');
-                    window.location.href = `confirmacion.html?plan=${selectedPlan}`;
-                } else {
-                    window.location.href = 'contacto.html';
+                    setTimeout(() => {
+                        sessionStorage.removeItem('selected_plan');
+                        window.location.href = `confirmacion.html?plan=${selectedPlan}`;
+                    }, 1000);
                 }
             } else {
-                errorDiv.textContent = 'Email o contraseña incorrectos';
-                errorDiv.style.display = 'block';
+                // Usuario NO logueado
+                loginView.style.display = 'block';
+                userView.style.display = 'none';
+                localStorage.removeItem('secureshield_user');
             }
+        }
+
+        // Función para cerrar sesión
+        function handleLogout() {
+            if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
+                netlifyIdentity.logout();
+            }
+        }
+
+        // Event listeners de Netlify Identity
+        netlifyIdentity.on('init', user => {
+            updateUI();
         });
+
+        netlifyIdentity.on('login', user => {
+            console.log('Login exitoso:', user.email);
+            netlifyIdentity.close();
+            updateUI();
+        });
+
+        netlifyIdentity.on('logout', () => {
+            console.log('Logout exitoso');
+            updateUI();
+            window.location.href = 'index.html';
+        });
+
+        netlifyIdentity.on('error', err => {
+            console.error('Error:', err);
+        });
+
+        netlifyIdentity.on('signup', user => {
+            console.log('Registro exitoso:', user.email);
+            netlifyIdentity.close();
+            updateUI();
+        });
+
+        // Actualizar UI al cargar la página
+        updateUI();
     </script>
 </body>
 </html>
