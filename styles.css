@@ -804,4 +804,10 @@ footer p {
     .steps {
         grid-template-columns: 1fr;
     }
+    .nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    align-items: center; /* ← Añade esta línea */
+    }
 }
