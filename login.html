@@ -18,7 +18,7 @@
             <ul class="nav-menu">
                 <li><a href="index.html">Inicio</a></li>
                 <li><a href="suscripcion.html">Planes</a></li>
-                <li><a href="tienda.html" class="active">Iniciar Sesión</a></li>
+                <li><a href="login.html" class="active">Iniciar Sesión</a></li>
                 <li><a href="contacto.html" class="active">Contacto</a></li>
             </ul>
         </div>
@@ -36,25 +36,6 @@
                     <h2>Iniciar Sesión</h2>
                     
                     <div id="loginError" class="alert alert-error" style="display:none;"></div>
-                    
-                    <form name="login" netlify id="loginForm">
-                        <p style="display:none;">
-                            <label>Don't fill this out: <input name="bot-field"></label>
-                        </p>
-                        
-                        <div class="form-group">
-                            <label for="login-email">Email</label>
-                            <input type="email" id="login-email" name="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="login-password">Contraseña</label>
-                            <input type="password" id="login-password" name="password" required>
-                        </div>
-                        <button type="submit" class="auth-button">Iniciar Sesión</button>
-                        <p style="text-align: center; margin-top: 1rem; color: var(--text-gray);">
-                            o <a href="#" onclick="netlifyIdentity.open('login'); return false;" style="color: var(--primary-color);">Usar Netlify Identity</a>
-                        </p>
-                    </form>
                 </div>
 
                 <div class="auth-box register-box">
@@ -62,38 +43,6 @@
                     
                     <div id="registerError" class="alert alert-error" style="display:none;"></div>
                     <div id="registerSuccess" class="alert alert-success" style="display:none;"></div>
-                    
-                    <form name="register" netlify id="registerForm">
-                        <p style="display:none;">
-                            <label>Don't fill this out: <input name="bot-field"></label>
-                        </p>
-                        
-                        <div class="form-group">
-                            <label for="nombre">Nombre Completo</label>
-                            <input type="text" id="nombre" name="nombre" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="empresa">Empresa</label>
-                            <input type="text" id="empresa" name="empresa" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="register-email">Email</label>
-                            <input type="email" id="register-email" name="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Contraseña</label>
-                            <input type="password" id="password" name="password" required minlength="8">
-                            <small>Mínimo 8 caracteres</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="confirm_password">Confirmar Contraseña</label>
-                            <input type="password" id="confirm_password" name="confirm_password" required>
-                        </div>
-                        <button type="submit" class="auth-button">Registrarse</button>
-                        <p style="text-align: center; margin-top: 1rem; color: var(--text-gray);">
-                            o <a href="#" onclick="netlifyIdentity.open('signup'); return false;" style="color: var(--primary-color);">Usar Netlify Identity</a>
-                        </p>
-                    </form>
                 </div>
             </div>
         </div>
@@ -213,7 +162,7 @@
                     sessionStorage.removeItem('selected_plan');
                     window.location.href = `confirmacion.html?plan=${selectedPlan}`;
                 } else {
-                    window.location.href = 'soporte.html';
+                    window.location.href = 'contacto.html';
                 }
             } else {
                 errorDiv.textContent = 'Email o contraseña incorrectos';
