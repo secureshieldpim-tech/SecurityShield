@@ -164,10 +164,6 @@ body {
     text-align: center;
     font-size: 2.5rem;
     margin-bottom: 3rem;
-    background: var(--gradient-2);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
 }
 
 .service-grid {

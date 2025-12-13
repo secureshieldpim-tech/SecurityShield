@@ -18,7 +18,7 @@
             <ul class="nav-menu">
                 <li><a href="index.html" class="active">Inicio</a></li>
                 <li><a href="suscripcion.html">Planes</a></li>
-                <li><a href="login.html">Iniciar Sesión</a></li>
+                <li><a href="login.html" id="loginLink">Iniciar Sesión</a></li>
                 <li><a href="contacto.html">Contacto</a></li>
                 <li><a href="#" id="logoutLink" class="logout-link" style="display:none;">Cerrar Sesión</a></li>
             </ul>
@@ -143,11 +143,17 @@
         // Función para actualizar UI según sesión
         function updateUI() {
             const user = netlifyIdentity.currentUser();
+            const loginLink = document.getElementById('loginLink');
             const logoutLink = document.getElementById('logoutLink');
             
             if (user) {
+                // Usuario logueado - ocultar login y mostrar logout
+                loginLink.style.display = 'none';
                 logoutLink.style.display = 'block';
-                logoutLink.textContent = `Cerrar Sesión (${user.email})`;
+                
+                // Mostrar nombre si existe, sino mostrar email sin dominio
+                const displayName = user.user_metadata?.full_name || user.email.split('@')[0];
+                logoutLink.textContent = `Cerrar Sesión (${displayName})`;
                 
                 // Guardar en localStorage para otras páginas
                 const userData = {
@@ -157,6 +163,8 @@
                 };
                 localStorage.setItem('secureshield_user', JSON.stringify(userData));
             } else {
+                // Usuario NO logueado - mostrar login y ocultar logout
+                loginLink.style.display = 'block';
                 logoutLink.style.display = 'none';
                 localStorage.removeItem('secureshield_user');
             }
