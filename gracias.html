@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mensaje Enviado - SecureShield</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="images/favicon.png">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="shield-icon">🛡️</span>
+                <span class="logo-text">SecureShield</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="suscripcion.html">Planes</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+                <li><a href="tienda.html" id="loginLink">Iniciar Sesión</a></li>
+                <li><a href="#" id="logoutLink" class="logout-link" style="display:none;">Cerrar Sesión</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="confirmation-section" style="padding: 5rem 2rem; min-height: 70vh;">
+        <div class="container">
+            <div class="success-confirmation" style="max-width: 700px; margin: 0 auto; text-align: center;">
+                <div class="success-icon" style="font-size: 5rem; margin-bottom: 2rem;">✅</div>
+                <h1 style="font-size: 2.5rem; margin-bottom: 1rem;">¡Mensaje Enviado con Éxito!</h1>
+                <p style="font-size: 1.2rem; color: var(--text-gray); margin-bottom: 3rem;">
+                    Gracias por contactar con SecureShield
+                </p>
+                
+                <div class="confirmation-details" style="background-color: var(--card-bg); padding: 2rem; border-radius: 15px; border: 2px solid rgba(0, 217, 255, 0.2); margin-bottom: 3rem;">
+                    <h2 style="color: var(--primary-color); margin-bottom: 1.5rem;">¿Qué sucede ahora?</h2>
+                    <div style="text-align: left;">
+                        <div style="padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <strong style="color: var(--primary-color);">1. Revisión de tu mensaje</strong>
+                            <p style="color: var(--text-gray); margin: 0.5rem 0 0 0;">
+                                Nuestro equipo revisará tu consulta de inmediato
+                            </p>
+                        </div>
+                        <div style="padding: 1rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <strong style="color: var(--primary-color);">2. Respuesta personalizada</strong>
+                            <p style="color: var(--text-gray); margin: 0.5rem 0 0 0;">
+                                Te responderemos en un plazo máximo de 24-48 horas
+                            </p>
+                        </div>
+                        <div style="padding: 1rem 0;">
+                            <strong style="color: var(--primary-color);">3. Email de confirmación</strong>
+                            <p style="color: var(--text-gray); margin: 0.5rem 0 0 0;">
+                                Hemos enviado un email de confirmación a tu dirección de correo
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: var(--gradient-2); padding: 2rem; border-radius: 15px; margin-bottom: 2rem;">
+                    <h3 style="margin-bottom: 1rem;">📧 Email de Contacto Directo</h3>
+                    <p style="margin-bottom: 1rem;">
+                        Si necesitas una respuesta urgente, también puedes escribirnos directamente a:
+                    </p>
+                    <a href="mailto:secureshield.pim@gmail.com" style="color: white; font-size: 1.2rem; font-weight: bold; text-decoration: none;">
+                        secureshield.pim@gmail.com
+                    </a>
+                </div>
+
+                <div class="action-buttons" style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="index.html" class="cta-button">Volver al Inicio</a>
+                    <a href="suscripcion.html" class="secondary-button" style="display: inline-block; padding: 1rem 2rem; background-color: var(--card-bg); color: var(--text-light); text-decoration: none; border-radius: 50px; font-weight: bold; border: 2px solid var(--primary-color);">Ver Planes</a>
+                    <a href="contacto.html" class="secondary-button" style="display: inline-block; padding: 1rem 2rem; background-color: var(--card-bg); color: var(--text-light); text-decoration: none; border-radius: 50px; font-weight: bold; border: 2px solid var(--primary-color);">Enviar Otro Mensaje</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="why-us" style="padding: 3rem 2rem; background-color: var(--darker-bg);">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 2rem;">Mientras tanto, conoce más sobre nosotros</h2>
+            <div class="features">
+                <div class="feature">
+                    <h3>🔍 Auditoría de Seguridad</h3>
+                    <p>Análisis completo de tu infraestructura con Nmap y evaluación de vulnerabilidades</p>
+                </div>
+                <div class="feature">
+                    <h3>🔒 Bastionado de Servidores</h3>
+                    <p>Configuración integral de firewall y cierre de puertos innecesarios</p>
+                </div>
+                <div class="feature">
+                    <h3>⚔️ Defensa con AppArmor</h3>
+                    <p>Implementación de control de acceso obligatorio para contención de brechas</p>
+                </div>
+                <div class="feature">
+                    <h3>🎓 Formación en Seguridad</h3>
+                    <p>Capacitación personalizada para tu equipo con las mejores prácticas</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 SecureShield - Endurecimiento de Servidores Web</p>
+            <p>Proyecto desarrollado por Iván Rosado, David Serrano y Ángel Sanmartín</p>
+        </div>
+    </footer>
+
+    <script>
+        // Gestión de sesión
+        function checkSession() {
+            const user = JSON.parse(localStorage.getItem('secureshield_user') || 'null');
+            const loginLink = document.getElementById('loginLink');
+            const supportLink = document.getElementById('supportLink');
+            const logoutLink = document.getElementById('logoutLink');
+            
+            if (user) {
+                loginLink.style.display = 'none';
+                supportLink.style.display = 'block';
+                logoutLink.style.display = 'block';
+                logoutLink.textContent = `Cerrar Sesión (${user.nombre})`;
+            }
+        }
+
+        document.getElementById('logoutLink')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('secureshield_user');
+            window.location.href = 'index.html';
+        });
+
+        checkSession();
+    </script>
+</body>
+</html>

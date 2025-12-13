@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto - SecureShield</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <link rel="icon" href="images/favicon.png">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="shield-icon">🛡️</span>
+                <span class="logo-text">SecureShield</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="suscripcion.html">Planes</a></li>
+                <li><a href="contacto.html" class="active">Contacto</a></li>
+                <li><a href="tienda.html" id="loginLink">Iniciar Sesión</a></li>
+                <li><a href="#" id="logoutLink" class="logout-link" style="display:none;">Cerrar Sesión</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="pricing-hero">
+        <div class="container">
+            <h1>¿Tienes Preguntas?</h1>
+            <p>Estamos aquí para ayudarte. Envíanos tu consulta y te responderemos lo antes posible</p>
+        </div>
+    </section>
+
+    <section class="auth-section">
+        <div class="container">
+            <div id="contactSuccess" class="alert alert-success" style="display:none; max-width: 800px; margin: 0 auto 2rem;"></div>
+            <div id="contactError" class="alert alert-error" style="display:none; max-width: 800px; margin: 0 auto 2rem;"></div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; max-width: 1200px; margin: 0 auto;">
+                
+                <!-- Formulario de Contacto -->
+                <div class="auth-box">
+                    <h2>📧 Formulario de Contacto</h2>
+                    <p style="text-align: center; color: var(--text-gray); margin-bottom: 2rem;">
+                        Completa el formulario y nos pondremos en contacto contigo
+                    </p>
+                    
+                    <form name="contacto" method="POST" data-netlify="true" action="/gracias.html" id="contactForm">
+                        <input type="hidden" name="form-name" value="contacto">
+                        
+                        <div class="form-group">
+                            <label for="nombre">Nombre Completo *</label>
+                            <input type="text" id="nombre" name="nombre" required placeholder="Tu nombre">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required placeholder="tu@email.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="telefono">Teléfono (Opcional)</label>
+                            <input type="tel" id="telefono" name="telefono" placeholder="+34 600 000 000">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="empresa">Empresa (Opcional)</label>
+                            <input type="text" id="empresa" name="empresa" placeholder="Nombre de tu empresa">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="asunto">Asunto *</label>
+                            <select id="asunto" name="asunto" required>
+                                <option value="">Selecciona un asunto</option>
+                                <option value="consulta_general">Consulta General</option>
+                                <option value="informacion_planes">Información sobre Planes</option>
+                                <option value="auditoria">Auditoría de Seguridad</option>
+                                <option value="bastionado">Bastionado de Servidores</option>
+                                <option value="apparmor">AppArmor / Defensa Avanzada</option>
+                                <option value="formacion">Formación y Capacitación</option>
+                                <option value="presupuesto">Solicitar Presupuesto</option>
+                                <option value="colaboracion">Oportunidades de Colaboración</option>
+                                <option value="otro">Otro</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mensaje">Mensaje *</label>
+                            <textarea id="mensaje" name="mensaje" rows="6" required placeholder="Cuéntanos en qué podemos ayudarte..."></textarea>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 1.5rem;">
+                            <label style="display: flex; align-items: start; gap: 0.5rem; cursor: pointer;">
+                                <input type="checkbox" id="privacidad" name="privacidad" required style="width: auto; margin-top: 0.25rem;">
+                                <span style="font-size: 0.9rem; color: var(--text-gray);">
+                                    He leído y acepto la <a href="#" style="color: var(--primary-color);">política de privacidad</a>
+                                </span>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="auth-button">Enviar Mensaje</button>
+                    </form>
+                </div>
+
+                <!-- Información de Contacto -->
+                <div style="display: flex; flex-direction: column; gap: 2rem;">
+                    <div class="auth-box">
+                        <h3 style="color: var(--primary-color); margin-bottom: 1.5rem;">📍 Información de Contacto</h3>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                            <div>
+                                <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">📧 Email</h4>
+                                <p style="color: var(--text-gray);">
+                                    <a href="mailto:secureshield.pim@gmail.com" style="color: var(--text-light); text-decoration: none;">
+                                        secureshield.pim@gmail.com
+                                    </a>
+                                </p>
+                            </div>
+
+                            <div>
+                                <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">⏰ Horario de Atención</h4>
+                                <p style="color: var(--text-gray); margin: 0;">
+                                    Lunes a Viernes: 9:00 - 18:00<br>
+                                    Sábados: 10:00 - 14:00<br>
+                                    <small style="color: var(--warning);">Emergencias críticas: 24/7</small>
+                                </p>
+                            </div>
+
+                            <div>
+                                <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">⚡ Tiempo de Respuesta</h4>
+                                <p style="color: var(--text-gray); margin: 0;">
+                                    Consultas generales: 24-48h<br>
+                                    Solicitudes de presupuesto: 4-8h<br>
+                                    Emergencias críticas: Inmediato
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="auth-box">
+                        <h3 style="color: var(--primary-color); margin-bottom: 1.5rem;">👥 Nuestro Equipo</h3>
+                        <p style="color: var(--text-gray); margin-bottom: 1rem;">
+                            Somos especialistas en seguridad de servidores web con años de experiencia en:
+                        </p>
+                        <ul style="color: var(--text-gray); list-style: none; padding: 0;">
+                            <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                ✅ Auditorías de seguridad
+                            </li>
+                            <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                ✅ Bastionado de sistemas
+                            </li>
+                            <li style="padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                ✅ Implementación de AppArmor
+                            </li>
+                            <li style="padding: 0.5rem 0;">
+                                ✅ Formación y consultoría
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="auth-box" style="background: var(--gradient-2); text-align: center;">
+                        <h3 style="margin-bottom: 1rem;">🎁 ¿Nuevo Cliente?</h3>
+                        <p style="margin-bottom: 1.5rem;">
+                            Menciona este formulario y obtén un 10% de descuento en tu primera auditoría
+                        </p>
+                        <a href="suscripcion.html" class="cta-button" style="display: inline-block;">
+                            Ver Planes
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="why-us" style="padding: 3rem 2rem;">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 2rem;">¿Por qué contactarnos?</h2>
+            <div class="features">
+                <div class="feature">
+                    <h3>🎯 Consultoría Personalizada</h3>
+                    <p>Analizamos tu caso específico y te ofrecemos soluciones a medida para tu infraestructura</p>
+                </div>
+                <div class="feature">
+                    <h3>💰 Presupuestos Sin Compromiso</h3>
+                    <p>Te enviamos presupuestos detallados y transparentes sin ningún tipo de obligación</p>
+                </div>
+                <div class="feature">
+                    <h3>⚡ Respuesta Rápida</h3>
+                    <p>Nuestro equipo responde en menos de 24 horas a todas las consultas recibidas</p>
+                </div>
+                <div class="feature">
+                    <h3>🛡️ Asesoramiento Experto</h3>
+                    <p>Especialistas certificados en seguridad listos para resolver tus dudas técnicas</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 SecureShield - Endurecimiento de Servidores Web</p>
+            <p>Proyecto desarrollado por Iván Rosado, David Serrano y Ángel Sanmartín</p>
+        </div>
+    </footer>
+
+    <script>
+        // Gestión de sesión
+        function checkSession() {
+            const user = JSON.parse(localStorage.getItem('secureshield_user') || 'null');
+            const loginLink = document.getElementById('loginLink');
+            const supportLink = document.getElementById('supportLink');
+            const logoutLink = document.getElementById('logoutLink');
+            
+            if (user) {
+                loginLink.style.display = 'none';
+                supportLink.style.display = 'block';
+                logoutLink.style.display = 'block';
+                logoutLink.textContent = `Cerrar Sesión (${user.nombre})`;
+                
+                // Prellenar formulario si hay usuario
+                document.getElementById('nombre').value = user.nombre || '';
+                document.getElementById('email').value = user.email || '';
+                document.getElementById('empresa').value = user.empresa || '';
+            }
+        }
+
+        document.getElementById('logoutLink')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('secureshield_user');
+            window.location.href = 'index.html';
+        });
+
+        // Manejo del formulario de contacto
+        document.getElementById('contactForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const successDiv = document.getElementById('contactSuccess');
+            const errorDiv = document.getElementById('contactError');
+            
+            successDiv.style.display = 'none';
+            errorDiv.style.display = 'none';
+            
+            // Deshabilitar botón de envío
+            const submitButton = e.target.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Enviando...';
+            
+            try {
+                // Enviar a Netlify Forms
+                const response = await fetch('/', {
+                    method: 'POST',
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: new URLSearchParams(formData).toString()
+                });
+                
+                if (response.ok) {
+                    successDiv.innerHTML = `
+                        <strong>✅ ¡Mensaje enviado con éxito!</strong><br>
+                        Gracias por contactarnos, ${formData.get('nombre')}. Hemos recibido tu mensaje y te responderemos en breve a ${formData.get('email')}.
+                    `;
+                    successDiv.style.display = 'block';
+                    e.target.reset();
+                    
+                    // Scroll al mensaje de éxito
+                    successDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else {
+                    throw new Error('Error al enviar');
+                }
+            } catch (error) {
+                errorDiv.innerHTML = `
+                    <strong>❌ Error al enviar el mensaje</strong><br>
+                    Por favor, intenta de nuevo o envíanos un email directamente a: 
+                    <a href="mailto:secureshield.pim@gmail.com" style="color: var(--primary-color);">secureshield.pim@gmail.com</a>
+                `;
+                errorDiv.style.display = 'block';
+                errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } finally {
+                // Rehabilitar botón de envío
+                submitButton.disabled = false;
+                submitButton.textContent = 'Enviar Mensaje';
+            }
+        });
+
+        // Responsive: cambiar layout en móvil
+        function checkResponsive() {
+            const container = document.querySelector('.auth-section .container > div');
+            if (window.innerWidth <= 768) {
+                container.style.gridTemplateColumns = '1fr';
+            } else {
+                container.style.gridTemplateColumns = '1fr 1fr';
+            }
+        }
+
+        window.addEventListener('resize', checkResponsive);
+        checkResponsive();
+        checkSession();
+    </script>
+</body>
+</html>
