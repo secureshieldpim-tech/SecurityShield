@@ -14,12 +14,12 @@
             <div class="logo">
                 <span class="shield-icon">🛡️</span>
                 <span class="logo-text">SecureShield</span>
-            </div>
+            </div>  
             <ul class="nav-menu">
                 <li><a href="index.html" class="active">Inicio</a></li>
                 <li><a href="suscripcion.html">Planes</a></li>
-                <li><a href="login.html" class="active">Iniciar Sesión</a></li>
-                <li><a href="contacto.html" class="active">Contacto</a></li>
+                <li><a href="login.html">Iniciar Sesión</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
                 <li><a href="#" id="logoutLink" class="logout-link" style="display:none;">Cerrar Sesión</a></li>
             </ul>
         </div>
@@ -137,28 +137,54 @@
     </footer>
 
     <script>
-        // Gestión de sesión
-        function checkSession() {
-            const user = JSON.parse(localStorage.getItem('secureshield_user') || 'null');
-            const loginLink = document.getElementById('loginLink');
-            const supportLink = document.getElementById('supportLink');
+        // Inicializar Netlify Identity
+        netlifyIdentity.init();
+
+        // Función para actualizar UI según sesión
+        function updateUI() {
+            const user = netlifyIdentity.currentUser();
             const logoutLink = document.getElementById('logoutLink');
             
             if (user) {
-                loginLink.style.display = 'none';
-                supportLink.style.display = 'block';
                 logoutLink.style.display = 'block';
-                logoutLink.textContent = `Cerrar Sesión (${user.nombre})`;
+                logoutLink.textContent = `Cerrar Sesión (${user.email})`;
+                
+                // Guardar en localStorage para otras páginas
+                const userData = {
+                    email: user.email,
+                    nombre: user.user_metadata?.full_name || user.email.split('@')[0],
+                    id: user.id
+                };
+                localStorage.setItem('secureshield_user', JSON.stringify(userData));
+            } else {
+                logoutLink.style.display = 'none';
+                localStorage.removeItem('secureshield_user');
             }
         }
 
-        document.getElementById('logoutLink')?.addEventListener('click', (e) => {
-            e.preventDefault();
-            localStorage.removeItem('secureshield_user');
-            window.location.href = 'index.html';
+        // Event listeners de Netlify Identity
+        netlifyIdentity.on('init', user => {
+            updateUI();
         });
 
-        checkSession();
+        netlifyIdentity.on('login', () => {
+            updateUI();
+        });
+
+        netlifyIdentity.on('logout', () => {
+            updateUI();
+        });
+
+        // Cerrar sesión
+        document.getElementById('logoutLink')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
+                netlifyIdentity.logout();
+            }
+        });
+
+        // Actualizar UI al cargar
+        updateUI();
     </script>
 </body>
 </html>
