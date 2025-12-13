@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planes - SecureShield</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="shield-icon">🛡️</span>
+                <span class="logo-text">SecureShield</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="suscripcion.html" class="active">Planes</a></li>
+                <li><a href="tienda.html" id="loginLink">Iniciar Sesión</a></li>
+                <li><a href="soporte.html" id="supportLink" style="display:none;">Soporte</a></li>
+                <li><a href="#" id="logoutLink" class="logout-link" style="display:none;">Cerrar Sesión</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="pricing-hero">
+        <div class="container">
+            <h1>Elige tu Plan de Protección</h1>
+            <p>Todos los planes incluyen nuestros 4 servicios principales</p>
+        </div>
+    </section>
+
+    <section class="pricing">
+        <div class="container">
+            <div class="pricing-grid">
+                
+                <div class="pricing-card trial">
+                    <div class="badge">Recomendado para empezar</div>
+                    <h3>Prueba Gratuita</h3>
+                    <div class="price">
+                        <span class="amount">0€</span>
+                        <span class="period">/ 7 días</span>
+                    </div>
+                    <ul class="features-list">
+                        <li>✅ Auditoría de Seguridad Inicial</li>
+                        <li>✅ Informe de Exposición de Red</li>
+                        <li>✅ Acceso a documentación</li>
+                        <li>✅ Soporte por email</li>
+                        <li>❌ Bastionado completo</li>
+                        <li>❌ Implementación de AppArmor</li>
+                        <li>❌ Formación personalizada</li>
+                    </ul>
+                    <a href="#" class="plan-button trial-button" data-plan="trial">Comenzar Prueba</a>
+                    <p class="plan-note">Sin tarjeta de crédito requerida</p>
+                </div>
+
+                <div class="pricing-card">
+                    <h3>Plan Mensual</h3>
+                    <div class="price">
+                        <span class="amount">149€</span>
+                        <span class="period">/ mes</span>
+                    </div>
+                    <ul class="features-list">
+                        <li>✅ Auditoría de Seguridad Completa</li>
+                        <li>✅ Bastionado de Servidores</li>
+                        <li>✅ Configuración de Firewall (UFW)</li>
+                        <li>✅ Autenticación por claves SSH</li>
+                        <li>✅ Protección de bases de datos</li>
+                        <li>✅ Implementación de AppArmor</li>
+                        <li>✅ Guía de Buenas Prácticas</li>
+                        <li>✅ Soporte prioritario 24/7</li>
+                    </ul>
+                    <a href="#" class="plan-button" data-plan="monthly">Seleccionar Plan</a>
+                    <p class="plan-note">Cancela cuando quieras</p>
+                </div>
+
+                <div class="pricing-card popular">
+                    <div class="badge">Más popular</div>
+                    <h3>Plan Anual</h3>
+                    <div class="price">
+                        <span class="amount">1.490€</span>
+                        <span class="period">/ año</span>
+                    </div>
+                    <div class="savings">Ahorra 298€ (2 meses gratis)</div>
+                    <ul class="features-list">
+                        <li>✅ Todo lo del Plan Mensual</li>
+                        <li>✅ Auditorías trimestrales incluidas</li>
+                        <li>✅ Actualizaciones de perfiles AppArmor</li>
+                        <li>✅ Sesiones formativas mensuales</li>
+                        <li>✅ Informes de seguridad personalizados</li>
+                        <li>✅ Monitoreo de vulnerabilidades</li>
+                        <li>✅ Soporte VIP con respuesta en 1h</li>
+                        <li>✅ Consultoría estratégica trimestral</li>
+                    </ul>
+                    <a href="#" class="plan-button popular-button" data-plan="annual">Seleccionar Plan</a>
+                    <p class="plan-note">Facturación anual - Mejor valor</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="services-included">
+        <div class="container">
+            <h2>¿Qué incluyen todos los planes de pago?</h2>
+            <div class="included-grid">
+                <div class="included-item">
+                    <h3>🔍 Auditoría Inicial</h3>
+                    <p>Análisis exhaustivo con Nmap de tu infraestructura. Informe detallado de puertos abiertos y servicios expuestos con evaluación de riesgos.</p>
+                </div>
+                <div class="included-item">
+                    <h3>🔒 Bastionado Completo</h3>
+                    <p>Cierre de puertos innecesarios, configuración segura de SSH con claves criptográficas, y protección de servicios críticos como MySQL.</p>
+                </div>
+                <div class="included-item">
+                    <h3>⚔️ AppArmor Premium</h3>
+                    <p>Perfiles de seguridad personalizados para tu servidor web. Contención de daños ante posibles brechas. Protección contra ataques de día cero.</p>
+                </div>
+                <div class="included-item">
+                    <h3>🎓 Capacitación Técnica</h3>
+                    <p>Guía de buenas prácticas personalizada. Explicación detallada de cada medida implementada. Formación para tu equipo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="faq">
+        <div class="container">
+            <h2>Preguntas Frecuentes</h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h3>¿Qué incluye la prueba gratuita?</h3>
+                    <p>La prueba de 7 días incluye una auditoría de seguridad inicial con Nmap y un informe detallado de tu exposición de red. Es perfecto para conocer el estado actual de tu infraestructura sin compromiso.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>¿Puedo cambiar de plan?</h3>
+                    <p>Sí, puedes actualizar de mensual a anual en cualquier momento. Te haremos un prorrateo justo del tiempo ya pagado.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>¿Cómo funciona el soporte?</h3>
+                    <p>Todos los planes de pago incluyen soporte técnico. El plan mensual tiene soporte 24/7 con respuesta en 4h, mientras que el anual incluye soporte VIP con respuesta en 1h.</p>
+                </div>
+                <div class="faq-item">
+                    <h3>¿Qué es AppArmor?</h3>
+                    <p>AppArmor es un sistema de control de acceso obligatorio que limita lo que una aplicación puede hacer. Incluso si un atacante compromete tu servidor web, AppArmor evitará que acceda a otras partes del sistema.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <h2>¿Tienes dudas?</h2>
+            <p>Contáctanos para una consulta personalizada sin compromiso</p>
+            <a href="tienda.html" class="cta-button" id="ctaButton">Contactar</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 SecureShield - Endurecimiento de Servidores Web</p>
+            <p>Proyecto desarrollado por Iván Rosado, David Serrano y Ángel Sanmartín</p>
+        </div>
+    </footer>
+
+    <script>
+        // Gestión de sesión
+        function checkSession() {
+            const user = JSON.parse(localStorage.getItem('secureshield_user') || 'null');
+            const loginLink = document.getElementById('loginLink');
+            const supportLink = document.getElementById('supportLink');
+            const logoutLink = document.getElementById('logoutLink');
+            const ctaButton = document.getElementById('ctaButton');
+            
+            if (user) {
+                loginLink.style.display = 'none';
+                supportLink.style.display = 'block';
+                logoutLink.style.display = 'block';
+                logoutLink.textContent = `Cerrar Sesión (${user.nombre})`;
+                
+                if (ctaButton) {
+                    ctaButton.href = 'soporte.html';
+                }
+            }
+        }
+
+        document.getElementById('logoutLink')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('secureshield_user');
+            window.location.href = 'index.html';
+        });
+
+        // Manejar clics en botones de planes
+        document.querySelectorAll('[data-plan]').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const plan = e.currentTarget.getAttribute('data-plan');
+                const user = JSON.parse(localStorage.getItem('secureshield_user') || 'null');
+                
+                if (user) {
+                    window.location.href = `confirmacion.html?plan=${plan}`;
+                } else {
+                    window.location.href = `tienda.html?plan=${plan}`;
+                }
+            });
+        });
+
+        checkSession();

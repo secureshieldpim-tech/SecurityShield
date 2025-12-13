@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - SecureShield</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="shield-icon">🛡️</span>
+                <span class="logo-text">SecureShield Admin</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="admin.html" class="active">Panel Admin</a></li>
+                <li><a href="index.html">Ver Web</a></li>
+                <li><a href="#" id="logoutLink" class="logout-link">Cerrar Sesión</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Vista de Login -->
+    <section id="loginView" class="auth-section">
+        <div class="container">
+            <div class="auth-box" style="max-width: 500px; margin: 0 auto;">
+                <h2>🔐 Acceso de Administrador</h2>
+                <p style="text-align: center; color: var(--text-gray); margin-bottom: 2rem;">
+                    Panel exclusivo para el equipo de SecureShield
+                </p>
+                
+                <div id="adminLoginError" class="alert alert-error" style="display:none;"></div>
+                
+                <form name="admin-login" netlify id="adminLoginForm">
+                    <p style="display:none;">
+                        <label>Don't fill this out: <input name="bot-field"></label>
+                    </p>
+                    
+                    <div class="form-group">
+                        <label for="email">Email de Administrador</label>
+                        <input type="email" id="email" name="email" required placeholder="tu@secureshield.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Contraseña</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="auth-button">Acceder al Panel</button>
+                </form>
+                
+                <p style="text-align: center; margin-top: 1.5rem; color: var(--text-gray); font-size: 0.9rem;">
+                    Solo personal autorizado: Ángel, David e Iván
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vista del Panel Admin -->
+    <section id="adminPanel" class="support-section" style="display:none;">
+        <div class="container">
+            <div class="admin-header">
+                <h1>Panel de Administración de Tickets</h1>
+                <p>Bienvenido, <strong id="adminName"></strong></p>
+            </div>
+
+            <div id="adminSuccess" class="alert alert-success" style="display:none;"></div>
+            <div id="adminError" class="alert alert-error" style="display:none;"></div>
+
+            <div class="admin-stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="statAbiertos">0</div>
+                    <div>Tickets Abiertos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="statEnProceso">0</div>
+                    <div>En Proceso</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" style="color: var(--danger);" id="statCriticos">0</div>
+                    <div>Críticos Activos</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="statTotal">0</div>
+                    <div>Total Tickets</div>
+                </div>
+            </div>
+
+            <div class="filters">
+                <label>Filtrar por Estado:</label>
+                <select id="filterEstado">
+                    <option value="todos">Todos</option>
+                    <option value="abierto">Abierto</option>
+                    <option value="en_proceso">En Proceso</option>
+                    <option value="cerrado">Cerrado</option>
+                </select>
+
+                <label>Filtrar por Prioridad:</label>
+                <select id="filterPrioridad">
+                    <option value="todos">Todas</option>
+                    <option value="critica">Crítica</option>
+                    <option value="alta">Alta</option>
+                    <option value="media">Media</option>
+                    <option value="baja">Baja</option>
+                </select>
+
+                <button class="filter-button" onclick="applyFilters()">Aplicar Filtros</button>
+                <button class="filter-button" onclick="clearFilters()">Limpiar</button>
+            </div>
+
+            <h2>Tickets (<span id="ticketCount">0</span> resultados)</h2>
+
+            <div id="adminTicketsList"></div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 SecureShield - Panel de Administración</p>
+            <p>Sesión de: <span id="adminFooterName"></span></p>
+        </div>
+    </footer>
+
+    <script>
+        // Administradores autorizados (en producción esto debería estar en el backend)
+        const admins = {
+            'angel@secureshield.com': { nombre: 'Ángel Sanmartín Abenia', password: 'Angel12345' },
+            'david@secureshield.com': { nombre: 'David Serrano Félez', password: 'David12345' },
+            'ivan@secureshield.com': { nombre: 'Iván Rosado Cortés', password: 'Ivan12345' }
+        };
+
+        // Verificar sesión de admin
+        let admin = JSON.parse(localStorage.getItem('secureshield_admin') || 'null');
+        
+        if (admin) {
+            showAdminPanel();
+        }
+
+        // Login de administrador
+        document.getElementById('adminLoginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('adminLoginError');
+            
+            errorDiv.style.display = 'none';
+            
+            if (admins[email] && admins[email].password === password) {
+                admin = {
+                    email: email,
+                    nombre: admins[email].nombre
+                };
+                localStorage.setItem('secureshield_admin', JSON.stringify(admin));
+                showAdminPanel();
+            } else {
+                errorDiv.textContent = 'Credenciales incorrectas o no tienes permisos de administrador';
+                errorDiv.style.display = 'block';
+            }
+        });
+
+        // Mostrar panel de administración
+        function showAdminPanel() {
+            document.getElementById('loginView').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
+            document.getElementById('adminName').textContent = admin.nombre;
+            document.getElementById('adminFooterName').textContent = admin.nombre;
+            loadTickets();
+        }
+
+        // Cerrar sesión
+        document.getElementById('logoutLink')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('secureshield_admin');
+            window.location.href = 'admin.html';
+        });
+
+        // Cargar tickets y calcular estadísticas
+        function loadTickets(filterEstado = 'todos', filterPrioridad = 'todos') {
+            const allTickets = JSON.parse(localStorage.getItem('secureshield_tickets') || '[]');
+            
+            // Filtrar tickets
+            let tickets = allTickets.filter(t => {
+                const matchEstado = filterEstado === 'todos' || t.estado === filterEstado;
+                const matchPrioridad = filterPrioridad === 'todos' || t.prioridad === filterPrioridad;
+                return matchEstado && matchPrioridad;
+            });
+
+            // Ordenar por prioridad y estado
+            const prioridadOrder = { critica: 1, alta: 2, media: 3, baja: 4 };
+            const estadoOrder = { abierto: 1, en_proceso: 2, cerrado: 3 };
+            
+            tickets.sort((a, b) => {
+                const prioDiff = prioridadOrder[a.prioridad] - prioridadOrder[b.prioridad];
+                if (prioDiff !== 0) return prioDiff;
+                const estadoDiff = estadoOrder[a.estado] - estadoOrder[b.estado];
+                if (estadoDiff !== 0) return estadoDiff;
+                return new Date(b.fecha_creacion) - new Date(a.fecha_creacion);
+            });
+
+            // Estadísticas
+            const abiertos = allTickets.filter(t => t.estado === 'abierto').length;
+            const enProceso = allTickets.filter(t => t.estado === 'en_proceso').length;
+            const criticos = allTickets.filter(t => t.prioridad === 'critica' && t.estado !== 'cerrado').length;
+            
+            document.getElementById('statAbiertos').textContent = abiertos;
+            document.getElementById('statEnProceso').textContent = enProceso;
+            document.getElementById('statCriticos').textContent = criticos;
+            document.getElementById('statTotal').textContent = allTickets.length;
+            document.getElementById('ticketCount').textContent = tickets.length;
+
+            // Renderizar tickets
+            const ticketsList = document.getElementById('adminTicketsList');
+            
+            if (tickets.length === 0) {
+                ticketsList.innerHTML = '<div class="no-tickets"><p>No hay tickets que coincidan con los filtros seleccionados.</p></div>';
+                return;
+            }
+
+            ticketsList.innerHTML = tickets.map(ticket => {
+                const users = JSON.parse(localStorage.getItem('secureshield_users') || '[]');
+                const user = users.find(u => u.email === ticket.user_email) || { nombre: 'Usuario', empresa: 'N/A' };
+                const fecha = new Date(ticket.fecha_creacion);
+                const fechaFormateada = fecha.toLocaleString('es-ES');
+
+                return `
+                    <div class="admin-ticket-item priority-${ticket.prioridad}">
+                        <div class="ticket-header">
+                            <h3>Ticket #${ticket.id}: ${ticket.asunto}</h3>
+                            <span class="ticket-status status-${ticket.estado}">
+                                ${ticket.estado.toUpperCase()}
+                            </span>
+                        </div>
+
+                        <div class="ticket-meta">
+                            <span class="ticket-category">${ticket.categoria}</span>
+                            <span class="ticket-priority priority-${ticket.prioridad}">
+                                🔥 Prioridad: ${ticket.prioridad}
+                            </span>
+                            <span class="ticket-date">📅 ${fechaFormateada}</span>
+                        </div>
+
+                        <div class="cliente-info">
+                            <strong>👤 Cliente:</strong> ${user.nombre} 
+                            | <strong>📧</strong> ${ticket.user_email}
+                            | <strong>🏢</strong> ${user.empresa || 'N/A'}
+                        </div>
+
+                        <p class="ticket-message"><strong>Mensaje inicial:</strong><br>${ticket.mensaje.replace(/\n/g, '<br>')}</p>
+
+                        ${ticket.respuestas && ticket.respuestas.length > 0 ? `
+                            <div class="chat-container">
+                                <div class="chat-header">
+                                    <strong>💬 Conversación (${ticket.respuestas.length} mensajes)</strong>
+                                    <span style="color: var(--warning);">⚠️ Se eliminará al cerrar el ticket</span>
+                                </div>
+                                ${ticket.respuestas.map(r => `
+                                    <div class="chat-message ${r.es_soporte ? 'admin-message' : 'user-message'}">
+                                        <div class="message-header">
+                                            <span class="message-author">
+                                                ${r.es_soporte ? '🛡️ ' + (r.nombre_respondedor || 'Admin') : '👤 ' + user.nombre}
+                                            </span>
+                                            <span class="message-time">${new Date(r.fecha).toLocaleString('es-ES')}</span>
+                                        </div>
+                                        <div class="message-text">${r.mensaje.replace(/\n/g, '<br>')}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+
+                        <div class="ticket-actions">
+                            ${ticket.estado !== 'cerrado' ? `
+                                <button class="action-button btn-responder" onclick="toggleRespuesta(${ticket.id})">
+                                    💬 ${ticket.respuestas && ticket.respuestas.length > 0 ? 'Continuar Chat' : 'Iniciar Chat'}
+                                </button>
+                            ` : ''}
+
+                            ${ticket.estado !== 'en_proceso' && ticket.estado !== 'cerrado' ? `
+                                <button onclick="cambiarEstado(${ticket.id}, 'en_proceso')" class="action-button btn-en-proceso">
+                                    ⚙️ Marcar En Proceso
+                                </button>
+                            ` : ''}
+
+                            ${ticket.estado !== 'cerrado' ? `
+                                <button onclick="cerrarTicket(${ticket.id})" class="action-button ${ticket.respuestas && ticket.respuestas.length > 0 ? 'btn-cerrar-warning' : 'btn-cerrar'}">
+                                    ✅ Cerrar Ticket${ticket.respuestas && ticket.respuestas.length > 0 ? ' (Eliminar Chat)' : ''}
+                                </button>
+                            ` : ''}
+                        </div>
+
+                        ${ticket.estado !== 'cerrado' ? `
+                            <div class="respuesta-form" id="respuesta-${ticket.id}">
+                                <textarea id="respuesta-text-${ticket.id}" rows="4" placeholder="Escribe tu mensaje en el chat..."></textarea>
+                                <button onclick="responderTicket(${ticket.id})" class="submit-button">Enviar Mensaje</button>
+                            </div>
+                        ` : ''}
+
+                        ${ticket.respuestas && ticket.respuestas.length > 0 ? `
+                            <div class="warning-box">
+                                <strong>⚠️ Advertencia:</strong>
+                                <p>Este ticket tiene ${ticket.respuestas.length} mensaje(s) en el chat. Al cerrar el ticket, toda la conversación se eliminará permanentemente.</p>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function toggleRespuesta(ticketId) {
+            const form = document.getElementById(`respuesta-${ticketId}`);
+            form.classList.toggle('active');
+        }
+
+        function cambiarEstado(ticketId, nuevoEstado) {
+            const tickets = JSON.parse(localStorage.getItem('secureshield_tickets') || '[]');
+            const ticket = tickets.find(t => t.id === ticketId);
+            
+            if (ticket) {
+                ticket.estado = nuevoEstado;
+                ticket.fecha_actualizacion = new Date().toISOString();
+                localStorage.setItem('secureshield_tickets', JSON.stringify(tickets));
+                
+                showMessage('success', `Estado del ticket actualizado a: ${nuevoEstado.toUpperCase()}`);
+                loadTickets(
+                    document.getElementById('filterEstado').value,
+                    document.getElementById('filterPrioridad').value
+                );
+            }
+        }
+
+        function cerrarTicket(ticketId) {
+            const tickets = JSON.parse(localStorage.getItem('secureshield_tickets') || '[]');
+            const ticket = tickets.find(t => t.id === ticketId);
+            
+            if (ticket) {
+                const confirmar = confirm(ticket.respuestas && ticket.respuestas.length > 0 
+                    ? '¿Cerrar este ticket? Esto eliminará toda la conversación de forma permanente.'
+                    : '¿Cerrar este ticket?');
+                
+                if (confirmar) {
+                    ticket.estado = 'cerrado';
+                    ticket.fecha_actualizacion = new Date().toISOString();
+                    ticket.respuestas = [];
+                    localStorage.setItem('secureshield_tickets', JSON.stringify(tickets));
+                    
+                    showMessage('success', 'Ticket cerrado. Se eliminará automáticamente en 24 horas.');
+                    loadTickets(
+                        document.getElementById('filterEstado').value,
+                        document.getElementById('filterPrioridad').value
+                    );
+                }
+            }
+        }
+
+        function responderTicket(ticketId) {
+            const tickets = JSON.parse(localStorage.getItem('secureshield_tickets') || '[]');
+            const ticket = tickets.find(t => t.id === ticketId);
+            const mensajeTextarea = document.getElementById(`respuesta-text-${ticketId}`);
+            const mensaje = mensajeTextarea.value.trim();
+            
+            if (!mensaje) {
+                alert('Por favor, escribe un mensaje');
+                return;
+            }
+            
+            if (ticket) {
+                if (!ticket.respuestas) {
+                    ticket.respuestas = [];
+                }
+                
+                ticket.respuestas.push({
+                    mensaje: mensaje,
+                    es_soporte: true,
+                    nombre_respondedor: admin.nombre,
+                    fecha: new Date().toISOString()
+                });
+                
+                if (ticket.estado === 'abierto') {
+                    ticket.estado = 'en_proceso';
+                }
+                
+                ticket.fecha_actualizacion = new Date().toISOString();
+                localStorage.setItem('secureshield_tickets', JSON.stringify(tickets));
+                
+                showMessage('success', 'Respuesta enviada correctamente');
+                loadTickets(
+                    document.getElementById('filterEstado').value,
+                    document.getElementById('filterPrioridad').value
+                );
+            }
+        }
+
+        function applyFilters() {
+            const estado = document.getElementById('filterEstado').value;
+            const prioridad = document.getElementById('filterPrioridad').value;
+            loadTickets(estado, prioridad);
+        }
+
+        function clearFilters() {
+            document.getElementById('filterEstado').value = 'todos';
+            document.getElementById('filterPrioridad').value = 'todos';
+            loadTickets();
+        }
+
+        function showMessage(type, message) {
+            const successDiv = document.getElementById('adminSuccess');
+            const errorDiv = document.getElementById('adminError');
+            
+            if (type === 'success') {
+                successDiv.textContent = message;
+                successDiv.style.display = 'block';
+                errorDiv.style.display = 'none';
+                setTimeout(() => { successDiv.style.display = 'none'; }, 5000);
+            } else {
+                errorDiv.textContent = message;
+                errorDiv.style.display = 'block';
+                successDiv.style.display = 'none';
+                setTimeout(() => { errorDiv.style.display = 'none'; }, 5000);
+            }
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

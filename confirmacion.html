@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmar Plan - SecureShield</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="shield-icon">🛡️</span>
+                <span class="logo-text">SecureShield</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="suscripcion.html">Planes</a></li>
+                <li><a href="soporte.html">Soporte</a></li>
+                <li><a href="#" id="logoutLink" class="logout-link">Cerrar Sesión</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="confirmation-section">
+        <div class="container">
+            <div id="successView" class="success-confirmation" style="display:none;">
+                <div class="success-icon">✅</div>
+                <h1>¡Suscripción Activada!</h1>
+                <p>Tu plan ha sido activado correctamente</p>
+                
+                <div class="confirmation-details">
+                    <h2>Detalles de tu suscripción</h2>
+                    <div class="detail-item">
+                        <strong>Plan:</strong> <span id="planNameSuccess"></span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Duración:</strong> <span id="planDurationSuccess"></span>
+                    </div>
+                    <div class="detail-item">
+                        <strong>Precio:</strong> <span id="planPriceSuccess"></span>€
+                    </div>
+                </div>
+
+                <div class="next-steps">
+                    <h3>¿Qué sigue ahora?</h3>
+                    <ol>
+                        <li>Nuestro equipo se pondrá en contacto contigo en las próximas 24 horas</li>
+                        <li>Recibirás un email con las instrucciones para comenzar la auditoría</li>
+                        <li>Puedes crear tickets de soporte cuando lo necesites</li>
+                    </ol>
+                </div>
+
+                <div class="action-buttons">
+                    <a href="soporte.html" class="cta-button">Ir a Soporte</a>
+                    <a href="index.html" class="secondary-button">Volver al Inicio</a>
+                </div>
+            </div>
+
+            <div id="confirmView" class="confirmation-card">
+                <h1>Confirmar Suscripción</h1>
+                <p>Estás a punto de activar tu plan de seguridad</p>
+
+                <div class="plan-summary">
+                    <h2 id="planName"></h2>
+                    <div class="plan-price">
+                        <span class="price" id="planPrice"></span>
+                        <span class="duration">/ <span id="planDuration"></span></span>
+                    </div>
+                    <p class="plan-desc" id="planDescription"></p>
+
+                    <div class="plan-includes">
+                        <h3>Tu plan incluye:</h3>
+                        <ul id="planFeatures"></ul>
+                    </div>
+                </div>
+
+                <form name="subscription" netlify id="subscriptionForm" class="confirmation-form">
+                    <input type="hidden" name="plan" id="form_plan">
+                    <input type="hidden" name="user_email" id="form_user_email">
+                    <input type="hidden" name="user_nombre" id="form_user_nombre">
+                    <input type="hidden" name="precio" id="form_precio">
+                    
+                    <p style="display:none;">
+                        <label>Don't fill this out: <input name="bot-field"></label>
+                    </p>
+                    
+                    <div class="form-agreement">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <label for="terms">He leído y acepto los términos y condiciones del servicio</label>
+                    </div>
+
+                    <div class="form-agreement">
+                        <input type="checkbox" id="privacy" name="privacy" required>
+                        <label for="privacy">Acepto la política de privacidad y el tratamiento de mis datos</label>
+                    </div>
+
+                    <div id="paymentNotice" class="payment-notice" style="display:none;">
+                        <p><strong>Nota:</strong> En un entorno de producción, aquí se integraría una pasarela de pago real (Stripe, PayPal, etc.). Para este proyecto educativo, la suscripción se activa directamente.</p>
+                    </div>
+
+                    <button type="submit" class="confirm-button" id="confirmButton">Activar Plan</button>
+                </form>
+
+                <a href="suscripcion.html" class="back-link">← Volver a ver otros planes</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 SecureShield - Endurecimiento de Servidores Web</p>
+            <p>Proyecto desarrollado por Iván Rosado, David Serrano y Ángel Sanmartín</p>
+        </div>
+    </footer>
+
+    <script>
+        // Verificar sesión
+        const user = JSON.parse(localStorage.getItem('secureshield_user') || 'null');
+        
+        if (!user) {
+            window.location.href = 'tienda.html';
+        }
+
+        // Configuración de planes
+        const planes = {
+            trial: {
+                nombre: 'Prueba Gratuita',
+                precio: 0,
+                duracion: '7 días',
+                descripcion: 'Acceso completo durante 7 días para probar nuestros servicios',
+                features: [
+                    '✅ Auditoría de Seguridad con Nmap',
+                    '✅ Informe detallado de exposición de red',
+                    '✅ Acceso a documentación',
+                    '✅ Soporte por email'
+                ]
+            },
+            monthly: {
+                nombre: 'Plan Mensual',
+                precio: 149,
+                duracion: '1 mes',
+                descripcion: 'Todos nuestros servicios de seguridad durante un mes',
+                features: [
+                    '✅ Auditoría de Seguridad con Nmap',
+                    '✅ Informe detallado de exposición de red',
+                    '✅ Bastionado completo de servidores',
+                    '✅ Implementación de AppArmor',
+                    '✅ Configuración de firewall (UFW)',
+                    '✅ Autenticación segura con claves SSH',
+                    '✅ Protección de bases de datos',
+                    '✅ Guía de buenas prácticas',
+                    '✅ Soporte técnico prioritario'
+                ]
+            },
+            annual: {
+                nombre: 'Plan Anual',
+                precio: 1490,
+                duracion: '1 año',
+                descripcion: 'Plan completo con 2 meses gratis y servicios premium',
+                features: [
+                    '✅ Auditoría de Seguridad con Nmap',
+                    '✅ Informe detallado de exposición de red',
+                    '✅ Bastionado completo de servidores',
+                    '✅ Implementación de AppArmor',
+                    '✅ Configuración de firewall (UFW)',
+                    '✅ Autenticación segura con claves SSH',
+                    '✅ Protección de bases de datos',
+                    '✅ Guía de buenas prácticas',
+                    '✅ Soporte técnico prioritario',
+                    '✅ Auditorías trimestrales incluidas',
+                    '✅ Sesiones formativas mensuales',
+                    '✅ Soporte VIP con respuesta en 1h'
+                ]
+            }
+        };
+
+        // Obtener plan de URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const planKey = urlParams.get('plan');
+        
+        if (!planKey || !planes[planKey]) {
+            window.location.href = 'suscripcion.html';
+        }
+
+        const planSeleccionado = planes[planKey];
+
+        // Cargar datos del plan
+        document.getElementById('planName').textContent = planSeleccionado.nombre;
+        document.getElementById('planPrice').textContent = planSeleccionado.precio + '€';
+        document.getElementById('planDuration').textContent = planSeleccionado.duracion;
+        document.getElementById('planDescription').textContent = planSeleccionado.descripcion;
+        
+        const featuresList = document.getElementById('planFeatures');
+        planSeleccionado.features.forEach(feature => {
+            const li = document.createElement('li');
+            li.textContent = feature;
+            featuresList.appendChild(li);
+        });
+
+        // Mostrar nota de pago si no es gratis
+        if (planSeleccionado.precio > 0) {
+            document.getElementById('paymentNotice').style.display = 'block';
+            document.getElementById('confirmButton').textContent = `Confirmar y Pagar ${planSeleccionado.precio}€`;
+        } else {
+            document.getElementById('confirmButton').textContent = 'Activar Prueba Gratuita';
+        }
+
+        // Rellenar campos ocultos del formulario
+        document.getElementById('form_plan').value = planKey;
+        document.getElementById('form_user_email').value = user.email;
+        document.getElementById('form_user_nombre').value = user.nombre;
+        document.getElementById('form_precio').value = planSeleccionado.precio;
+
+        // Cerrar sesión
+        document.getElementById('logoutLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('secureshield_user');
+            window.location.href = 'index.html';
+        });
+
+        // Manejar envío del formulario
+        document.getElementById('subscriptionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            
+            try {
+                // Enviar a Netlify Forms
+                const response = await fetch('/', {
+                    method: 'POST',
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: new URLSearchParams(formData).toString()
+                });
+                
+                if (response.ok) {
+                    // Guardar suscripción en localStorage
+                    const subscriptions = JSON.parse(localStorage.getItem('secureshield_subscriptions') || '[]');
+                    const newSubscription = {
+                        id: Date.now(),
+                        user_email: user.email,
+                        plan: planKey,
+                        precio: planSeleccionado.precio,
+                        estado: 'activa',
+                        fecha_inicio: new Date().toISOString(),
+                        fecha_creacion: new Date().toISOString()
+                    };
+                    
+                    subscriptions.push(newSubscription);
+                    localStorage.setItem('secureshield_subscriptions', JSON.stringify(subscriptions));
+                    
+                    // Mostrar vista de éxito
+                    document.getElementById('confirmView').style.display = 'none';
+                    document.getElementById('successView').style.display = 'block';
+                    
+                    document.getElementById('planNameSuccess').textContent = planSeleccionado.nombre;
+                    document.getElementById('planDurationSuccess').textContent = planSeleccionado.duracion;
+                    document.getElementById('planPriceSuccess').textContent = planSeleccionado.precio;
+                    
+                    // Scroll al inicio
+                    window.scrollTo(0, 0);
+                } else {
+                    throw new Error('Error al procesar');
+                }
+            } catch (error) {
+                alert('Error al activar la suscripción. Por favor, intenta de nuevo.');
+            }
+        });
+    </script>
+</body>
+</html>
