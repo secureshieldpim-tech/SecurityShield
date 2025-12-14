@@ -8,11 +8,17 @@
     <link rel="icon" href="images/favicon.png">
 </head>
 <body>
+    <div class="nav-overlay"></div>
     <nav class="navbar">
         <div class="nav-container">
             <div class="logo">
                 <span class="shield-icon">🛡️</span>
                 <span class="logo-text">SecureShield</span>
+            </div>
+            <div class="mobile-menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
             </div>
             <ul class="nav-menu">
                 <li><a href="index.html">Inicio</a></li>
@@ -253,6 +259,47 @@
                     : 'Activar Prueba Gratuita';
             }
         });
+    </script>
+    <script>
+    // Menú móvil
+    document.addEventListener('DOMContentLoaded', function() {
+    const menuToggle = document.querySelector('.mobile-menu-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+    const overlay = document.querySelector('.nav-overlay');
+    const navLinks = navMenu.querySelectorAll('a');
+
+    menuToggle.addEventListener('click', function() {
+        menuToggle.classList.toggle('active');
+        navMenu.classList.toggle('active');
+        overlay.classList.toggle('active');
+        document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
+    });
+
+    overlay.addEventListener('click', function() {
+        menuToggle.classList.remove('active');
+        navMenu.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    });
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+        menuToggle.classList.remove('active');
+        navMenu.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+        });
+    });
+
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+        menuToggle.classList.remove('active');
+        navMenu.classList.remove('active');
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+        }
+    });
+    });
     </script>
 </body>
 </html>
