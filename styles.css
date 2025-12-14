@@ -59,6 +59,7 @@ body {
     gap: 10px;
     font-size: 1.5rem;
     font-weight: bold;
+    z-index: 1001;
 }
 
 .shield-icon {
@@ -90,13 +91,11 @@ body {
     display: inline-block;
 }
 
-/* Hover para todos los enlaces */
 .nav-menu a:hover {
     color: var(--primary-color);
     background-color: rgba(0, 217, 255, 0.1);
 }
 
-/* Active - enlace de la página actual */
 .nav-menu a.active {
     color: var(--text-light);
     background-color: rgba(0, 217, 255, 0.2);
@@ -109,6 +108,24 @@ body {
 
 .logout-link:hover {
     background-color: rgba(239, 68, 68, 0.1) !important;
+}
+
+/* Menú hamburguesa - solo visible en móvil */
+.mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    padding: 0.5rem;
+    z-index: 1001;
+}
+
+.mobile-menu-toggle span {
+    width: 25px;
+    height: 3px;
+    background-color: var(--primary-color);
+    margin: 3px 0;
+    transition: all 0.3s ease;
+    border-radius: 3px;
 }
 
 /* Hero Section */
@@ -311,7 +328,7 @@ body {
 
 .pricing-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
     max-width: 1200px;
     margin: 0 auto;
@@ -410,6 +427,7 @@ body {
     border-radius: 10px;
     font-weight: bold;
     transition: transform 0.3s;
+    min-height: 48px;
 }
 
 .plan-button:hover {
@@ -546,6 +564,7 @@ body {
     border-radius: 5px;
     color: var(--text-light);
     font-size: 1rem;
+    min-height: 48px;
 }
 
 .form-group input:focus,
@@ -574,6 +593,7 @@ body {
     font-weight: bold;
     cursor: pointer;
     transition: transform 0.3s;
+    min-height: 48px;
 }
 
 .auth-button:hover {
@@ -598,184 +618,76 @@ body {
     color: #6ee7b7;
 }
 
-/* Support Section */
-.support-section {
+/* Confirmation Section */
+.confirmation-section {
     padding: 3rem 2rem;
-    min-height: 80vh;
+    min-height: 70vh;
 }
 
-.user-welcome {
-    background: var(--gradient-2);
-    padding: 2rem;
-    border-radius: 10px;
-    margin-bottom: 3rem;
-    text-align: center;
-}
-
-.user-welcome h1 {
-    margin-bottom: 0.5rem;
-}
-
-.support-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 2rem;
-    margin-bottom: 3rem;
-}
-
-.support-form-container {
+.confirmation-card,
+.success-confirmation {
     background-color: var(--card-bg);
-    padding: 2rem;
+    padding: 2.5rem;
     border-radius: 15px;
     border: 2px solid rgba(0, 217, 255, 0.2);
+    max-width: 800px;
+    margin: 0 auto;
 }
 
-.support-form-container h2 {
-    color: var(--primary-color);
+.success-icon {
+    font-size: 4rem;
+    text-align: center;
     margin-bottom: 1.5rem;
 }
 
-.submit-button {
-    width: 100%;
-    padding: 1rem;
-    background: var(--gradient-2);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: transform 0.3s;
-}
-
-.submit-button:hover {
-    transform: scale(1.02);
-}
-
-.quick-help {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.quick-help h3 {
-    color: var(--primary-color);
-    margin-bottom: 1rem;
-}
-
-.help-card {
-    background-color: var(--card-bg);
-    padding: 1.5rem;
-    border-radius: 10px;
-    border-left: 4px solid var(--primary-color);
-}
-
-.help-card h4 {
-    margin-bottom: 0.5rem;
-}
-
-.help-card p {
-    font-size: 0.9rem;
-    color: var(--text-gray);
-    margin: 0.25rem 0;
-}
-
-/* Tickets Section */
-.tickets-section {
-    background-color: var(--card-bg);
-    padding: 2rem;
-    border-radius: 15px;
-    border: 2px solid rgba(0, 217, 255, 0.2);
-}
-
-.tickets-section h2 {
-    color: var(--primary-color);
-    margin-bottom: 2rem;
-}
-
-.tickets-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.ticket-item {
+.confirmation-details,
+.next-steps {
     background-color: var(--darker-bg);
-    padding: 1.5rem;
+    padding: 2rem;
     border-radius: 10px;
-    border: 1px solid rgba(0, 217, 255, 0.2);
+    margin: 2rem 0;
 }
 
-.ticket-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
+.detail-item {
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.ticket-header h3 {
-    color: var(--primary-color);
-    font-size: 1.2rem;
-}
-
-.ticket-status {
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: bold;
-}
-
-.status-abierto {
-    background-color: var(--warning);
-    color: white;
-}
-
-.status-en_proceso {
-    background-color: var(--secondary-color);
-    color: white;
-}
-
-.status-cerrado {
-    background-color: var(--success);
-    color: white;
-}
-
-.ticket-meta {
+.action-buttons {
     display: flex;
     gap: 1rem;
-    margin-bottom: 1rem;
+    margin-top: 2rem;
     flex-wrap: wrap;
 }
 
-.ticket-category,
-.ticket-priority,
-.ticket-date {
-    font-size: 0.85rem;
-    color: var(--text-gray);
-    padding: 0.25rem 0.75rem;
+.secondary-button {
+    display: inline-block;
+    padding: 1rem 2rem;
     background-color: var(--card-bg);
-    border-radius: 5px;
+    color: var(--text-light);
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: bold;
+    border: 2px solid var(--primary-color);
+    transition: all 0.3s;
 }
 
-.priority-critica {
-    background-color: rgba(239, 68, 68, 0.2);
-    color: var(--danger);
+.secondary-button:hover {
+    background-color: var(--primary-color);
+    transform: translateY(-2px);
 }
 
-.priority-alta {
-    background-color: rgba(245, 158, 11, 0.2);
-    color: var(--warning);
+.back-link {
+    display: inline-block;
+    margin-top: 2rem;
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: all 0.3s;
 }
 
-.ticket-message {
-    color: var(--text-gray);
-    line-height: 1.6;
-}
-
-.no-tickets {
-    text-align: center;
-    padding: 3rem;
-    color: var(--text-gray);
+.back-link:hover {
+    color: var(--text-light);
+    transform: translateX(-5px);
 }
 
 /* Footer */
@@ -792,30 +704,214 @@ footer p {
     margin: 0.5rem 0;
 }
 
-/* Responsive */
+/* ============================================
+   RESPONSIVE - MÓVIL
+   ============================================ */
+
+@media (max-width: 992px) {
+    .pricing-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+    
+    .service-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+}
+
 @media (max-width: 768px) {
+    /* Hero responsive */
+    .hero {
+        padding: 4rem 1.5rem;
+    }
+    
     .hero h1 {
         font-size: 2rem;
+        line-height: 1.3;
     }
 
     .subtitle {
-        font-size: 1rem;
+        font-size: 1.1rem;
     }
-
+    
+    .pricing-hero h1,
+    .services h2,
+    .why-us h2,
+    .methodology h2,
+    .cta-section h2 {
+        font-size: 1.8rem;
+    }
+    
+    /* Navegación móvil */
+    .mobile-menu-toggle {
+        display: flex;
+    }
+    
     .nav-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background-color: var(--darker-bg);
         flex-direction: column;
-        gap: 1rem;
+        justify-content: flex-start;
+        align-items: stretch;
+        padding: 5rem 0 2rem;
+        gap: 0;
+        transition: right 0.3s ease;
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+        overflow-y: auto;
     }
-
-    .support-grid {
+    
+    .nav-menu.active {
+        right: 0;
+    }
+    
+    .nav-menu li {
+        width: 100%;
+        border-bottom: 1px solid rgba(0, 217, 255, 0.1);
+    }
+    
+    .nav-menu a {
+        display: block;
+        width: 100%;
+        padding: 1rem 2rem;
+        border-radius: 0;
+        text-align: left;
+    }
+    
+    /* Overlay cuando el menú está abierto */
+    .nav-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        z-index: 999;
+    }
+    
+    .nav-overlay.active {
+        display: block;
+    }
+    
+    /* Animación hamburguesa */
+    .mobile-menu-toggle.active span:nth-child(1) {
+        transform: rotate(45deg) translate(8px, 8px);
+    }
+    
+    .mobile-menu-toggle.active span:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .mobile-menu-toggle.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -7px);
+    }
+    
+    /* Grids responsive */
+    .service-grid,
+    .features,
+    .steps,
+    .included-grid,
+    .faq-grid {
         grid-template-columns: 1fr;
+        gap: 1.5rem;
     }
-
+    
+    .pricing-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    /* Auth container responsive */
     .auth-container {
         grid-template-columns: 1fr;
+        gap: 2rem;
     }
+    
+    .auth-box {
+        padding: 2rem 1.5rem;
+    }
+    
+    /* Botones más grandes para móvil (mejor táctil) */
+    .cta-button,
+    .auth-button,
+    .plan-button {
+        padding: 1.2rem 2rem;
+        font-size: 1rem;
+        min-height: 52px;
+    }
+    
+    /* Secciones con menos padding */
+    .services,
+    .why-us,
+    .methodology,
+    .pricing {
+        padding: 3rem 1.5rem;
+    }
+    
+    .cta-section {
+        padding: 3rem 1.5rem;
+    }
+    
+    /* Confirmation buttons responsive */
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .action-buttons a {
+        width: 100%;
+        text-align: center;
+    }
+    
+    /* Pricing card spacing */
+    .pricing-card {
+        padding: 2rem 1.5rem;
+    }
+    
+    .amount {
+        font-size: 2.5rem;
+    }
+    
+    /* Form improvements móvil */
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        font-size: 16px; /* Evita zoom automático en iOS */
+    }
+}
 
-    .steps {
-        grid-template-columns: 1fr;
+@media (max-width: 480px) {
+    /* Ajustes extra para móviles muy pequeños */
+    .hero h1 {
+        font-size: 1.75rem;
+    }
+    
+    .logo-text {
+        font-size: 1.2rem;
+    }
+    
+    .shield-icon {
+        font-size: 1.5rem;
+    }
+    
+    .pricing-hero h1 {
+        font-size: 1.5rem;
+    }
+    
+    .nav-menu {
+        width: 85%;
+    }
+    
+    .container {
+        padding: 0 15px;
+    }
+    
+    .auth-box,
+    .confirmation-card,
+    .success-confirmation {
+        padding: 1.5rem 1rem;
     }
 }
