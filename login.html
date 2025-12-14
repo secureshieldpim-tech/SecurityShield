@@ -77,8 +77,11 @@
             <ul class="nav-menu">
                 <li><a href="index.html">Inicio</a></li>
                 <li><a href="suscripcion.html">Planes</a></li>
-                <li><a href="login.html" class="active">Iniciar Sesión</a></li>
                 <li><a href="contacto.html">Contacto</a></li>
+                <li>
+                    <a href="login.html" id="loginLink" class="active">Iniciar Sesión</a>
+                    <a href="#" id="logoutLink" class="logout-link" style="display:none;">Cerrar Sesión</a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -188,10 +191,8 @@
     </footer>
 
     <script>
-        // Inicializar Netlify Identity
         netlifyIdentity.init();
 
-        // Verificar si hay plan seleccionado
         const urlParams = new URLSearchParams(window.location.search);
         const plan = urlParams.get('plan');
         
@@ -201,19 +202,16 @@
             sessionStorage.setItem('selected_plan', plan);
         }
 
-        // Función para actualizar la UI según el estado de login
         function updateUI() {
             const user = netlifyIdentity.currentUser();
             const loginView = document.getElementById('loginView');
             const userView = document.getElementById('userView');
             
             if (user) {
-                // Usuario logueado
                 loginView.style.display = 'none';
                 userView.style.display = 'block';
                 document.getElementById('userEmail').textContent = user.email;
                 
-                // Guardar datos del usuario en localStorage para usar en otras páginas
                 const userData = {
                     email: user.email,
                     nombre: user.user_metadata?.full_name || user.email.split('@')[0],
@@ -222,7 +220,6 @@
                 };
                 localStorage.setItem('secureshield_user', JSON.stringify(userData));
                 
-                // Si hay plan seleccionado, redirigir
                 const selectedPlan = sessionStorage.getItem('selected_plan');
                 if (selectedPlan) {
                     setTimeout(() => {
@@ -231,48 +228,32 @@
                     }, 1000);
                 }
             } else {
-                // Usuario NO logueado
                 loginView.style.display = 'block';
                 userView.style.display = 'none';
                 localStorage.removeItem('secureshield_user');
             }
         }
 
-        // Función para cerrar sesión
         function handleLogout() {
             if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
                 netlifyIdentity.logout();
             }
         }
 
-        // Event listeners de Netlify Identity
-        netlifyIdentity.on('init', user => {
-            updateUI();
-        });
-
+        netlifyIdentity.on('init', updateUI);
         netlifyIdentity.on('login', user => {
-            console.log('Login exitoso:', user.email);
             netlifyIdentity.close();
             updateUI();
         });
-
         netlifyIdentity.on('logout', () => {
-            console.log('Logout exitoso');
             updateUI();
             window.location.href = 'index.html';
         });
-
-        netlifyIdentity.on('error', err => {
-            console.error('Error:', err);
-        });
-
         netlifyIdentity.on('signup', user => {
-            console.log('Registro exitoso:', user.email);
             netlifyIdentity.close();
             updateUI();
         });
 
-        // Actualizar UI al cargar la página
         updateUI();
     </script>
 </body>

@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contacto - SecureShield</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <link rel="icon" href="images/favicon.png">
 </head>
 <body>
@@ -19,8 +18,10 @@
                 <li><a href="index.html">Inicio</a></li>
                 <li><a href="suscripcion.html">Planes</a></li>
                 <li><a href="contacto.html" class="active">Contacto</a></li>
-                <li><a href="login.html" class="active">Iniciar Sesión</a></li>
-                <li><a href="#" id="logoutLink" class="logout-link" style="display:none;">Cerrar Sesión</a></li>
+                <li>
+                    <a href="login.html" id="loginLink">Iniciar Sesión</a>
+                    <a href="#" id="logoutLink" class="logout-link" style="display:none;">Cerrar Sesión</a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -205,33 +206,31 @@
     </footer>
 
     <script>
-        // Gestión de sesión
         function checkSession() {
             const user = JSON.parse(localStorage.getItem('secureshield_user') || 'null');
             const loginLink = document.getElementById('loginLink');
-            const supportLink = document.getElementById('supportLink');
             const logoutLink = document.getElementById('logoutLink');
             
             if (user) {
-                loginLink.style.display = 'none';
-                supportLink.style.display = 'block';
-                logoutLink.style.display = 'block';
-                logoutLink.textContent = `Cerrar Sesión (${user.nombre})`;
+                if (loginLink) loginLink.style.display = 'none';
+                if (logoutLink) {
+                    logoutLink.style.display = 'block';
+                    logoutLink.textContent = `Cerrar Sesión (${user.nombre})`;
+                }
                 
-                // Prellenar formulario si hay usuario
                 document.getElementById('nombre').value = user.nombre || '';
                 document.getElementById('email').value = user.email || '';
-                document.getElementById('empresa').value = user.empresa || '';
             }
         }
 
         document.getElementById('logoutLink')?.addEventListener('click', (e) => {
             e.preventDefault();
-            localStorage.removeItem('secureshield_user');
-            window.location.href = 'index.html';
+            if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
+                localStorage.removeItem('secureshield_user');
+                window.location.href = 'index.html';
+            }
         });
 
-        // Manejo del formulario de contacto
         document.getElementById('contactForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -242,13 +241,11 @@
             successDiv.style.display = 'none';
             errorDiv.style.display = 'none';
             
-            // Deshabilitar botón de envío
             const submitButton = e.target.querySelector('button[type="submit"]');
             submitButton.disabled = true;
             submitButton.textContent = 'Enviando...';
             
             try {
-                // Enviar a Netlify Forms
                 const response = await fetch('/', {
                     method: 'POST',
                     headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -262,8 +259,6 @@
                     `;
                     successDiv.style.display = 'block';
                     e.target.reset();
-                    
-                    // Scroll al mensaje de éxito
                     successDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 } else {
                     throw new Error('Error al enviar');
@@ -277,19 +272,19 @@
                 errorDiv.style.display = 'block';
                 errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
             } finally {
-                // Rehabilitar botón de envío
                 submitButton.disabled = false;
                 submitButton.textContent = 'Enviar Mensaje';
             }
         });
 
-        // Responsive: cambiar layout en móvil
         function checkResponsive() {
             const container = document.querySelector('.auth-section .container > div');
-            if (window.innerWidth <= 768) {
-                container.style.gridTemplateColumns = '1fr';
-            } else {
-                container.style.gridTemplateColumns = '1fr 1fr';
+            if (container) {
+                if (window.innerWidth <= 768) {
+                    container.style.gridTemplateColumns = '1fr';
+                } else {
+                    container.style.gridTemplateColumns = '1fr 1fr';
+                }
             }
         }
 

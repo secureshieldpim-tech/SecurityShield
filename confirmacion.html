@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Confirmar Plan - SecureShield</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <link rel="icon" href="images/favicon.png">
 </head>
 <body>
@@ -18,8 +17,11 @@
             <ul class="nav-menu">
                 <li><a href="index.html">Inicio</a></li>
                 <li><a href="suscripcion.html">Planes</a></li>
-                <li><a href="contacto.html" class="active">Contacto</a></li>
-                <li><a href="#" id="logoutLink" class="logout-link">Cerrar Sesión</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+                <li>
+                    <a href="login.html" id="loginLink" style="display:none;">Iniciar Sesión</a>
+                    <a href="#" id="logoutLink" class="logout-link">Cerrar Sesión</a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -76,6 +78,19 @@
                         <ul id="planFeatures"></ul>
                     </div>
                 </div>
+
+                <form name="suscripcion" method="POST" data-netlify="true" id="subscriptionForm">
+                    <input type="hidden" name="form-name" value="suscripcion">
+                    <input type="hidden" name="plan" id="form_plan">
+                    <input type="hidden" name="user_email" id="form_user_email">
+                    <input type="hidden" name="user_nombre" id="form_user_nombre">
+                    <input type="hidden" name="precio" id="form_precio">
+                    
+                    <button type="submit" class="cta-button" id="confirmButton" style="width: 100%; margin-top: 2rem;">
+                        Activar Suscripción
+                    </button>
+                </form>
+
                 <a href="suscripcion.html" class="back-link">← Volver a ver otros planes</a>
             </div>
         </div>
@@ -89,14 +104,12 @@
     </footer>
 
     <script>
-        // Verificar sesión
         const user = JSON.parse(localStorage.getItem('secureshield_user') || 'null');
         
         if (!user) {
-            window.location.href = 'tienda.html';
+            window.location.href = 'login.html';
         }
 
-        // Configuración de planes
         const planes = {
             trial: {
                 nombre: 'Prueba Gratuita',
@@ -149,7 +162,6 @@
             }
         };
 
-        // Obtener plan de URL
         const urlParams = new URLSearchParams(window.location.search);
         const planKey = urlParams.get('plan');
         
@@ -159,7 +171,6 @@
 
         const planSeleccionado = planes[planKey];
 
-        // Cargar datos del plan
         document.getElementById('planName').textContent = planSeleccionado.nombre;
         document.getElementById('planPrice').textContent = planSeleccionado.precio + '€';
         document.getElementById('planDuration').textContent = planSeleccionado.duracion;
@@ -172,35 +183,36 @@
             featuresList.appendChild(li);
         });
 
-        // Mostrar nota de pago si no es gratis
+        const confirmButton = document.getElementById('confirmButton');
         if (planSeleccionado.precio > 0) {
-            document.getElementById('paymentNotice').style.display = 'block';
-            document.getElementById('confirmButton').textContent = `Confirmar y Pagar ${planSeleccionado.precio}€`;
+            confirmButton.textContent = `Confirmar y Pagar ${planSeleccionado.precio}€`;
         } else {
-            document.getElementById('confirmButton').textContent = 'Activar Prueba Gratuita';
+            confirmButton.textContent = 'Activar Prueba Gratuita';
         }
 
-        // Rellenar campos ocultos del formulario
         document.getElementById('form_plan').value = planKey;
         document.getElementById('form_user_email').value = user.email;
         document.getElementById('form_user_nombre').value = user.nombre;
         document.getElementById('form_precio').value = planSeleccionado.precio;
 
-        // Cerrar sesión
+        document.getElementById('logoutLink').textContent = `Cerrar Sesión (${user.nombre})`;
         document.getElementById('logoutLink').addEventListener('click', (e) => {
             e.preventDefault();
-            localStorage.removeItem('secureshield_user');
-            window.location.href = 'index.html';
+            if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
+                localStorage.removeItem('secureshield_user');
+                window.location.href = 'index.html';
+            }
         });
 
-        // Manejar envío del formulario
         document.getElementById('subscriptionForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const formData = new FormData(e.target);
+            const submitButton = e.target.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Procesando...';
             
             try {
-                // Enviar a Netlify Forms
                 const response = await fetch('/', {
                     method: 'POST',
                     headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -208,7 +220,6 @@
                 });
                 
                 if (response.ok) {
-                    // Guardar suscripción en localStorage
                     const subscriptions = JSON.parse(localStorage.getItem('secureshield_subscriptions') || '[]');
                     const newSubscription = {
                         id: Date.now(),
@@ -223,7 +234,6 @@
                     subscriptions.push(newSubscription);
                     localStorage.setItem('secureshield_subscriptions', JSON.stringify(subscriptions));
                     
-                    // Mostrar vista de éxito
                     document.getElementById('confirmView').style.display = 'none';
                     document.getElementById('successView').style.display = 'block';
                     
@@ -231,13 +241,16 @@
                     document.getElementById('planDurationSuccess').textContent = planSeleccionado.duracion;
                     document.getElementById('planPriceSuccess').textContent = planSeleccionado.precio;
                     
-                    // Scroll al inicio
                     window.scrollTo(0, 0);
                 } else {
                     throw new Error('Error al procesar');
                 }
             } catch (error) {
                 alert('Error al activar la suscripción. Por favor, intenta de nuevo.');
+                submitButton.disabled = false;
+                submitButton.textContent = planSeleccionado.precio > 0 
+                    ? `Confirmar y Pagar ${planSeleccionado.precio}€` 
+                    : 'Activar Prueba Gratuita';
             }
         });
     </script>

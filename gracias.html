@@ -18,8 +18,10 @@
                 <li><a href="index.html">Inicio</a></li>
                 <li><a href="suscripcion.html">Planes</a></li>
                 <li><a href="contacto.html">Contacto</a></li>
-                <li><a href="login.html" class="active">Iniciar Sesión</a></li>
-                <li><a href="#" id="logoutLink" class="logout-link" style="display:none;">Cerrar Sesión</a></li>
+                <li>
+                    <a href="login.html" id="loginLink">Iniciar Sesión</a>
+                    <a href="#" id="logoutLink" class="logout-link" style="display:none;">Cerrar Sesión</a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -108,25 +110,26 @@
     </footer>
 
     <script>
-        // Gestión de sesión
         function checkSession() {
             const user = JSON.parse(localStorage.getItem('secureshield_user') || 'null');
             const loginLink = document.getElementById('loginLink');
-            const supportLink = document.getElementById('supportLink');
             const logoutLink = document.getElementById('logoutLink');
             
             if (user) {
-                loginLink.style.display = 'none';
-                supportLink.style.display = 'block';
-                logoutLink.style.display = 'block';
-                logoutLink.textContent = `Cerrar Sesión (${user.nombre})`;
+                if (loginLink) loginLink.style.display = 'none';
+                if (logoutLink) {
+                    logoutLink.style.display = 'block';
+                    logoutLink.textContent = `Cerrar Sesión (${user.nombre})`;
+                }
             }
         }
 
         document.getElementById('logoutLink')?.addEventListener('click', (e) => {
             e.preventDefault();
-            localStorage.removeItem('secureshield_user');
-            window.location.href = 'index.html';
+            if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
+                localStorage.removeItem('secureshield_user');
+                window.location.href = 'index.html';
+            }
         });
 
         checkSession();

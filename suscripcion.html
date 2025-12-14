@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Planes - SecureShield</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <link rel="icon" href="images/favicon.png">
 </head>
 <body>
@@ -18,9 +17,11 @@
             <ul class="nav-menu">
                 <li><a href="index.html">Inicio</a></li>
                 <li><a href="suscripcion.html" class="active">Planes</a></li>
-                <li><a href="login.html" class="active">Iniciar Sesión</a></li>
-                <li><a href="contacto.html" class="active">Contacto</a></li>
-                <li><a href="#" id="logoutLink" class="logout-link" style="display:none;">Cerrar Sesión</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+                <li>
+                    <a href="login.html" id="loginLink">Iniciar Sesión</a>
+                    <a href="#" id="logoutLink" class="logout-link" style="display:none;">Cerrar Sesión</a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -154,7 +155,7 @@
         <div class="container">
             <h2>¿Tienes dudas?</h2>
             <p>Contáctanos para una consulta personalizada sin compromiso</p>
-            <a href="tienda.html" class="cta-button" id="ctaButton">Contactar</a>
+            <a href="contacto.html" class="cta-button">Contactar</a>
         </div>
     </section>
 
@@ -166,33 +167,28 @@
     </footer>
 
     <script>
-        // Gestión de sesión
         function checkSession() {
             const user = JSON.parse(localStorage.getItem('secureshield_user') || 'null');
             const loginLink = document.getElementById('loginLink');
-            const supportLink = document.getElementById('supportLink');
             const logoutLink = document.getElementById('logoutLink');
-            const ctaButton = document.getElementById('ctaButton');
             
             if (user) {
-                loginLink.style.display = 'none';
-                supportLink.style.display = 'block';
-                logoutLink.style.display = 'block';
-                logoutLink.textContent = `Cerrar Sesión (${user.nombre})`;
-                
-                if (ctaButton) {
-                    ctaButton.href = 'contacto.html';
+                if (loginLink) loginLink.style.display = 'none';
+                if (logoutLink) {
+                    logoutLink.style.display = 'block';
+                    logoutLink.textContent = `Cerrar Sesión (${user.nombre})`;
                 }
             }
         }
 
         document.getElementById('logoutLink')?.addEventListener('click', (e) => {
             e.preventDefault();
-            localStorage.removeItem('secureshield_user');
-            window.location.href = 'index.html';
+            if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
+                localStorage.removeItem('secureshield_user');
+                window.location.href = 'index.html';
+            }
         });
 
-        // Manejar clics en botones de planes
         document.querySelectorAll('[data-plan]').forEach(button => {
             button.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -202,9 +198,12 @@
                 if (user) {
                     window.location.href = `confirmacion.html?plan=${plan}`;
                 } else {
-                    window.location.href = `tienda.html?plan=${plan}`;
+                    window.location.href = `login.html?plan=${plan}`;
                 }
             });
         });
 
         checkSession();
+    </script>
+</body>
+</html>
