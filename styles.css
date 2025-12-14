@@ -82,19 +82,30 @@ body {
     color: var(--text-gray);
     text-decoration: none;
     font-weight: 500;
-    transition: color 0.3s;
+    transition: all 0.3s ease;
     padding: 0.5rem 1rem;
     border-radius: 5px;
 }
 
-.nav-menu a:hover,
-.nav-menu a.active {
+/* Hover para todos los enlaces */
+.nav-menu a:hover {
     color: var(--primary-color);
     background-color: rgba(0, 217, 255, 0.1);
 }
 
+/* Active - enlace de la página actual */
+.nav-menu a.active {
+    color: var(--text-light);
+    background-color: rgba(0, 217, 255, 0.2);
+    border: 1px solid var(--primary-color);
+}
+
 .logout-link {
     color: var(--danger) !important;
+}
+
+.logout-link:hover {
+    background-color: rgba(239, 68, 68, 0.1) !important;
 }
 
 /* Hero Section */
