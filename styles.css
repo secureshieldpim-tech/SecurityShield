@@ -915,45 +915,55 @@ footer p {
         padding: 1.5rem 1rem;
     }
 }
-/* ===== FIX CONTACTO MÓVIL - CLASES CORRECTAS ===== */
+/* ===== FIX CONTACTO MÓVIL - SOLUCIÓN DEFINITIVA ===== */
 @media (max-width: 768px) {
-    /* Auth section usado en contacto */
-    .auth-section {
-        padding: 2rem 1rem;
-    }
-    
-    /* Grid de auth-box: cambiar a columna única */
-    .auth-container {
-        grid-template-columns: 1fr !important;
+    /* Forzar una sola columna en el contenedor de auth */
+    section.auth-section .auth-container {
+        display: flex !important;
+        flex-direction: column !important;
         gap: 1.5rem;
     }
     
-    /* Auth-box más compacto */
-    .auth-box {
-        padding: 1.5rem !important;
+    /* Auth-box al 100% de ancho */
+    .auth-section .auth-box {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 1.5rem;
+        margin: 0;
     }
     
-    /* Hero de contacto */
+    /* Hero de contacto más pequeño */
+    .pricing-hero {
+        padding: 2.5rem 1rem;
+    }
+    
     .pricing-hero h1 {
         font-size: 1.8rem;
     }
     
     .pricing-hero p {
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
     
-    /* Features grid (info de contacto) */
-    .features {
-        grid-template-columns: 1fr !important;
+    /* Features grid a una columna */
+    .auth-section .features {
+        display: flex !important;
+        flex-direction: column !important;
         gap: 1rem;
     }
     
-    .feature {
+    .auth-section .feature {
+        width: 100%;
         padding: 1.2rem;
     }
     
-    /* Textarea más alto en móvil */
-    textarea {
-        min-height: 120px !important;
+    /* Títulos de los boxes más pequeños */
+    .auth-box h2 {
+        font-size: 1.5rem;
+    }
+    
+    /* Textarea más cómodo */
+    .auth-section textarea {
+        min-height: 150px;
     }
 }
