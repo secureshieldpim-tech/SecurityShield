@@ -76,3 +76,8 @@
 
     console.log('✅ Menú móvil inicializado correctamente');
 })();
+
+console.log('🔍 DEBUG MENÚ MÓVIL');
+console.log('Toggle existe:', !!menuToggle);
+console.log('Menu existe:', !!navMenu);
+console.log('Overlay existe:', !!navOverlay);
