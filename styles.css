@@ -63,7 +63,9 @@ body {
 }
 
 .shield-icon {
-    font-size: 2rem;
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
 }
 
 .logo-text {
@@ -948,5 +950,836 @@ footer p {
     .feature {
         width: 100% !important;
         margin-bottom: 1rem !important;
+    }
+}
+/* ============================================
+   ANIMACIONES Y EFECTOS ADICIONALES
+   ============================================ */
+
+/* 1. FONDO ANIMADO CON GRID TECNOLÓGICO */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        linear-gradient(90deg, rgba(0, 217, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(rgba(0, 217, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: grid-move 20s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes grid-move {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+}
+
+/* Asegurar que el contenido esté por encima */
+.navbar, .hero, section, footer {
+    position: relative;
+    z-index: 1;
+}
+
+/* 2. GRADIENTES ANIMADOS EN BOTONES */
+.cta-button, .auth-button, .plan-button {
+    background: linear-gradient(45deg, #00d9ff, #0099ff, #667eea, #764ba2);
+    background-size: 300% 300%;
+    animation: gradient-shift 3s ease infinite;
+    position: relative;
+    overflow: hidden;
+}
+
+@keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Efecto de brillo en hover de botones */
+.cta-button::before, .auth-button::before, .plan-button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.cta-button:hover::before, .auth-button:hover::before, .plan-button:hover::before {
+    left: 100%;
+}
+
+/* 3. ANIMACIÓN DE ENTRADA ÚNICA Y SUAVE */
+.service-card, .feature, .pricing-card, .step, .included-item, .faq-item {
+    opacity: 0;
+    animation: smoothEntry 0.6s ease-out forwards;
+}
+
+/* Delays escalonados para efecto cascada */
+.service-card:nth-child(1), .pricing-card:nth-child(1) { animation-delay: 0.1s; }
+.service-card:nth-child(2), .pricing-card:nth-child(2) { animation-delay: 0.2s; }
+.service-card:nth-child(3), .pricing-card:nth-child(3) { animation-delay: 0.3s; }
+.service-card:nth-child(4), .pricing-card:nth-child(4) { animation-delay: 0.4s; }
+
+.feature:nth-child(1) { animation-delay: 0.1s; }
+.feature:nth-child(2) { animation-delay: 0.2s; }
+.feature:nth-child(3) { animation-delay: 0.3s; }
+.feature:nth-child(4) { animation-delay: 0.4s; }
+
+/* Animación suave de entrada - SE EJECUTA UNA SOLA VEZ */
+@keyframes smoothEntry {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* 4. GLASSMORPHISM EN CARDS */
+.service-card, .pricing-card, .auth-box, .feature, .included-item {
+    background: rgba(19, 25, 64, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 
+        0 8px 32px 0 rgba(0, 217, 255, 0.1),
+        0 0 0 1px rgba(0, 217, 255, 0.2) inset;
+}
+
+/* 5. EFECTO DE ESCANEO EN HERO */
+.hero {
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #00d9ff, transparent);
+    animation: scan 4s ease-in-out infinite;
+    box-shadow: 0 0 10px #00d9ff;
+}
+
+@keyframes scan {
+    0% { top: -5%; opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { top: 105%; opacity: 0; }
+}
+
+/* 6. HOVER SUTIL Y ELEGANTE */
+.service-card {
+    transition: all 0.3s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-8px); /* Menos movimiento */
+    box-shadow: 
+        0 12px 24px rgba(0, 217, 255, 0.3),
+        0 0 15px rgba(0, 217, 255, 0.15) inset;
+    border-color: var(--primary-color);
+}
+
+.service-card:hover .service-icon {
+    transform: scale(1.1); /* Solo un pequeño zoom, sin rotación */
+    filter: drop-shadow(0 0 10px rgba(0, 217, 255, 0.8));
+}
+
+.service-icon {
+    transition: all 0.3s ease;
+}
+
+.pricing-card {
+    transition: all 0.3s ease;
+}
+
+.pricing-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 30px 60px rgba(0, 217, 255, 0.4);
+    border-color: var(--primary-color);
+}
+
+.pricing-card:hover .badge {
+    animation: badge-bounce 0.6s ease;
+}
+
+@keyframes badge-bounce {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.15); }
+}
+
+/* 7. ANIMACIÓN DE PULSO PARA BADGES */
+.badge {
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+    0%, 100% { 
+        box-shadow: 0 0 5px rgba(0, 217, 255, 0.5);
+    }
+    50% { 
+        box-shadow: 0 0 20px rgba(0, 217, 255, 0.8),
+                    0 0 30px rgba(0, 217, 255, 0.4);
+    }
+}
+
+/* 8. EFECTO GLOW EN ICONOS */
+.service-icon {
+    transition: all 0.3s ease;
+    filter: drop-shadow(0 0 5px rgba(0, 217, 255, 0.5));
+}
+
+.shield-icon {
+    animation: glow-pulse 2s ease-in-out infinite alternate;
+    display: inline-block;
+}
+
+@keyframes glow-pulse {
+    from {
+        filter: drop-shadow(0 0 5px rgba(0, 217, 255, 0.6));
+    }
+    to {
+        filter: drop-shadow(0 0 15px rgba(0, 217, 255, 1))
+                drop-shadow(0 0 25px rgba(0, 153, 255, 0.6));
+    }
+}
+
+/* 9. LOADING STATES PARA BOTONES */
+.auth-button:disabled, .plan-button:disabled, button:disabled {
+    background: linear-gradient(90deg, 
+        rgba(0, 217, 255, 0.3) 0%, 
+        rgba(0, 217, 255, 0.6) 50%, 
+        rgba(0, 217, 255, 0.3) 100%
+    );
+    background-size: 200% 100%;
+    animation: loading-shimmer 1.5s ease-in-out infinite;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+@keyframes loading-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* 10. EFECTO PARALLAX EN HERO */
+.hero, .pricing-hero, .cta-section {
+    background-attachment: fixed;
+    background-position: center;
+}
+
+/* 12. EFECTO DE ONDAS AL HACER CLIC */
+.cta-button, .auth-button, .plan-button {
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-button:active::after, .auth-button:active::after, .plan-button:active::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    transform: translate(-50%, -50%);
+    animation: ripple 0.6s ease-out;
+}
+
+@keyframes ripple {
+    to {
+        width: 300px;
+        height: 300px;
+        opacity: 0;
+    }
+}
+
+/* 13. ANIMACIÓN DE ENTRADA PARA EL HERO */
+.hero-content {
+    animation: hero-entrance 1s ease-out;
+}
+
+@keyframes hero-entrance {
+    from {
+        opacity: 0;
+        transform: translateY(50px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* 14. EFECTO HOVER EN LINKS DEL NAV */
+.nav-menu a {
+    position: relative;
+}
+
+.nav-menu a::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--primary-color);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.nav-menu a:hover::after, .nav-menu a.active::after {
+    width: 100%;
+}
+
+/* 16. SMOOTH SCROLL */
+html {
+    scroll-behavior: smooth;
+}
+
+/* 17. ANIMACIÓN PARA NÚMEROS DE PRECIOS */
+.amount {
+    animation: price-pop 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes price-pop {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* 18. FADE IN SIMPLE PARA EL TÍTULO (sin typing) */
+.hero h1 {
+    animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 19. MEJORA EN SUCCESS/ERROR ALERTS */
+.alert {
+    animation: slide-in 0.5s ease-out;
+}
+
+@keyframes slide-in {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* 20. RESPONSIVE: REDUCIR ANIMACIONES EN MÓVIL */
+@media (max-width: 768px) {
+    /* Reducir o desactivar animaciones complejas en móvil */
+    .hero::after {
+        animation-duration: 6s; /* Más lento */
+    }
+    
+    body::before {
+        animation-duration: 30s; /* Grid más lento */
+        opacity: 0.5; /* Menos visible */
+    }
+    
+    .service-card:hover {
+        transform: translateY(-5px); /* Menos movimiento */
+    }
+    
+    /* Desactivar animación de typing en móvil */
+    .hero h1 {
+        animation: none;
+        white-space: normal;
+        width: auto;
+    }
+}
+
+/* PREFERENCIA DE MOVIMIENTO REDUCIDO */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ============================================
+   MEJORAS DE DISEÑO - SECURITYSHIELD
+   ============================================ */
+
+/* 1. ESPACIADO Y RESPIRACIÓN MEJORADA */
+.service-card, .pricing-card, .feature, .included-item {
+    padding: 2.5rem;
+}
+
+.service-card p, .feature p, .pricing-card p {
+    line-height: 1.8;
+    margin-top: 1rem;
+}
+
+/* Más espacio entre secciones */
+.services, .why-us, .methodology, .pricing, .services-included, .faq {
+    padding: 6rem 2rem;
+}
+
+/* 2. BOTONES MÁS DESTACADOS */
+.trial-button {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+}
+
+.trial-button:hover {
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+    transform: translateY(-3px) scale(1.02);
+}
+
+.popular-button {
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.popular-button:hover {
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+/* 3. ICONOS MÁS GRANDES Y LLAMATIVOS */
+.service-icon {
+    font-size: 3.5rem !important;
+    margin-bottom: 1.5rem !important;
+    display: inline-block;
+}
+
+/* 4. FEATURES CON MEJOR INTERACCIÓN */
+.feature {
+    background-color: var(--card-bg);
+    padding: 2.5rem;
+    border-radius: 15px;
+    border-left: 4px solid var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+.feature:hover {
+    transform: translateX(10px);
+    box-shadow: 0 8px 16px rgba(0, 217, 255, 0.2);
+    border-left-width: 6px;
+}
+
+.feature h3 {
+    font-size: 1.3rem;
+}
+
+/* 5. SEPARADORES VISUALES ENTRE SECCIONES */
+.services::after, 
+.why-us::after, 
+.methodology::after {
+    content: "";
+    display: block;
+    width: 100px;
+    height: 3px;
+    background: var(--gradient-2);
+    margin: 4rem auto 0;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+}
+
+/* 6. FOOTER MEJORADO */
+footer {
+    background: linear-gradient(135deg, #060920 0%, #0a0e27 100%);
+    padding: 3rem 2rem;
+    border-top: 3px solid var(--primary-color);
+    box-shadow: 0 -5px 20px rgba(0, 217, 255, 0.1);
+}
+
+footer p {
+    font-size: 1rem;
+    line-height: 2;
+}
+
+footer p:first-child {
+    font-weight: 600;
+    color: var(--text-light);
+}
+
+/* 7. BADGES MÁS DESTACADOS */
+.badge {
+    font-size: 0.9rem !important;
+    padding: 0.6rem 2rem !important;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+/* 8. PRICING CARDS HOVER MÁS SUTIL */
+.pricing-card {
+    transition: all 0.3s ease;
+}
+
+.pricing-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 217, 255, 0.3);
+}
+
+.pricing-card:hover .amount {
+    color: #00f0ff;
+    text-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+}
+
+/* 9. CONTRASTE MEJORADO EN TEXTOS */
+body {
+    color: #e2e8f0; /* Texto principal más claro */
+}
+
+p, .plan-note, .period, .features-list li {
+    color: #cbd5e1; /* Texto secundario más legible */
+}
+
+/* 10. ESTADOS ACTIVOS EN FORMULARIOS */
+.form-group input,
+.form-group select,
+.form-group textarea {
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.1);
+    transform: scale(1.01);
+    background-color: rgba(19, 25, 64, 0.8);
+}
+
+/* 11. TÍTULOS DE SECCIÓN MÁS IMPACTANTES */
+.services h2,
+.why-us h2,
+.methodology h2,
+.pricing h2,
+.services-included h2,
+.faq h2,
+.cta-section h2 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    background: var(--gradient-2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+}
+
+/* Subtítulos de secciones */
+.services h2 + p,
+.why-us h2 + p,
+.pricing-hero p {
+    font-size: 1.2rem;
+    color: var(--text-gray);
+    margin-bottom: 3rem;
+}
+
+/* 12. INCLUDED ITEMS MÁS ATRACTIVOS */
+.included-item {
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.included-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 217, 255, 0.2);
+    border-left-color: #00f0ff;
+}
+
+.included-item h3 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+}
+
+/* 13. FAQ ITEMS CON MEJOR DISEÑO */
+.faq-item {
+    transition: all 0.3s ease;
+    cursor: default;
+}
+
+.faq-item:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(0, 217, 255, 0.2);
+    border-color: var(--primary-color);
+}
+
+.faq-item h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+/* 14. STEP CARDS MEJORADAS */
+.step {
+    transition: all 0.3s ease;
+}
+
+.step:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 217, 255, 0.2);
+}
+
+.step h3 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+}
+
+/* 15. MEJORA EN PLAN-BUTTON */
+.plan-button {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(0, 217, 255, 0.3);
+}
+
+.plan-button:hover {
+    box-shadow: 0 6px 20px rgba(0, 217, 255, 0.5);
+}
+
+/* 16. PRICING FEATURES LIST MEJORADA */
+.features-list li {
+    padding: 1rem 0;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.features-list li:hover {
+    padding-left: 10px;
+    color: var(--text-light);
+}
+
+/* 17. SAVINGS BADGE MÁS VISIBLE */
+.savings {
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
+}
+
+/* 18. AMOUNT (PRECIO) MÁS DESTACADO */
+.amount {
+    font-size: 3.5rem;
+    font-weight: 800;
+    background: var(--gradient-2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* 19. NAVBAR CON MEJOR SOMBRA */
+.navbar {
+    box-shadow: 0 4px 12px rgba(0, 217, 255, 0.15);
+}
+
+/* 20. CTA SECTION MÁS IMPACTANTE */
+.cta-section {
+    background: var(--gradient-1);
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-section::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 50%, rgba(0, 217, 255, 0.1) 0%, transparent 70%);
+    animation: pulse-bg 3s ease-in-out infinite;
+}
+
+@keyframes pulse-bg {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+.cta-section h2,
+.cta-section p {
+    position: relative;
+    z-index: 1;
+}
+
+/* 21. AUTH-BOX Y CONFIRMATION MEJORADOS */
+.auth-box,
+.confirmation-card,
+.success-confirmation {
+    box-shadow: 0 10px 30px rgba(0, 217, 255, 0.15);
+}
+
+.auth-box h2 {
+    font-size: 2rem;
+}
+
+/* 22. RESPONSIVE: AJUSTES MÓVIL */
+@media (max-width: 768px) {
+    .services h2,
+    .why-us h2,
+    .methodology h2,
+    .pricing h2 {
+        font-size: 2rem;
+    }
+    
+    .service-icon {
+        font-size: 3rem !important;
+    }
+    
+    .amount {
+        font-size: 2.8rem;
+    }
+    
+    .services, .why-us, .methodology, .pricing {
+        padding: 4rem 1.5rem;
+    }
+    
+    .feature:hover {
+        transform: translateX(0); /* Sin movimiento horizontal en móvil */
+    }
+}
+
+/* FONDO DEL HERO - ESCUDO CON IMAGEN */
+
+/* Escudo central animado con imagen */
+.hero .hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero .hero-content::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+    background-image: url('images/favicon.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.12;
+    z-index: -1;
+    pointer-events: none;
+    filter: blur(2px) brightness(1.2);
+    animation: shield-float 5s ease-in-out infinite;
+}
+
+/* Animación más pronunciada del escudo */
+@keyframes shield-float {
+    0%, 100% {
+        opacity: 0.10;
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    }
+    25% {
+        opacity: 0.14;
+        transform: translate(-50%, -48%) scale(1.08) rotate(2deg);
+    }
+    50% {
+        opacity: 0.16;
+        transform: translate(-50%, -52%) scale(1.12) rotate(-2deg);
+    }
+    75% {
+        opacity: 0.14;
+        transform: translate(-50%, -48%) scale(1.08) rotate(1deg);
+    }
+}
+
+/* Asegurar contenido visible */
+.hero h1,
+.hero p,
+.hero .cta-button {
+    position: relative;
+    z-index: 3;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .hero .hero-content::after {
+        width: 400px;
+        height: 400px;
+        opacity: 0.10;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero .hero-content::after {
+        width: 300px;
+        height: 300px;
+        opacity: 0.08;
+    }
+}
+
+
+/* Animación más pronunciada del escudo */
+@keyframes shield-float {
+    0%, 100% {
+        opacity: 0.06;
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+    }
+    25% {
+        opacity: 0.10;
+        transform: translate(-50%, -48%) scale(1.08) rotate(2deg);
+    }
+    50% {
+        opacity: 0.12;
+        transform: translate(-50%, -52%) scale(1.12) rotate(-2deg);
+    }
+    75% {
+        opacity: 0.10;
+        transform: translate(-50%, -48%) scale(1.08) rotate(1deg);
+    }
+}
+
+/* Asegurar contenido visible */
+.hero h1,
+.hero p,
+.hero .cta-button {
+    position: relative;
+    z-index: 3;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .hero .hero-content::after {
+        font-size: 14rem;
+        opacity: 0.06;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero .hero-content::after {
+        font-size: 10rem;
+        opacity: 0.05;
     }
 }
