@@ -297,46 +297,70 @@
         checkResponsive();
         checkSession();
     </script>
-    <script>
-    // Menú móvil
-    document.addEventListener('DOMContentLoaded', function() {
+<script>
+/* Menú móvil - SOLUCIÓN DEFINITIVA */
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('JavaScript cargado'); // Para debugging
+    
     const menuToggle = document.querySelector('.mobile-menu-toggle');
     const navMenu = document.querySelector('.nav-menu');
     const overlay = document.querySelector('.nav-overlay');
     const navLinks = navMenu.querySelectorAll('a');
-
-    menuToggle.addEventListener('click', function() {
+    
+    console.log('Elementos encontrados:', {
+        menuToggle: !!menuToggle,
+        navMenu: !!navMenu,
+        overlay: !!overlay
+    });
+    
+    if (!menuToggle || !navMenu || !overlay) {
+        console.error('ERROR: No se encontraron los elementos del menú');
+        return;
+    }
+    
+    // Clic en hamburguesa
+    menuToggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Click en hamburguesa');
+        
         menuToggle.classList.toggle('active');
         navMenu.classList.toggle('active');
         overlay.classList.toggle('active');
         document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
     });
-
+    
+    // Clic en overlay
     overlay.addEventListener('click', function() {
+        console.log('Click en overlay');
         menuToggle.classList.remove('active');
         navMenu.classList.remove('active');
         overlay.classList.remove('active');
         document.body.style.overflow = '';
     });
-
+    
+    // Clic en links
     navLinks.forEach(link => {
         link.addEventListener('click', function() {
-        menuToggle.classList.remove('active');
-        navMenu.classList.remove('active');
-        overlay.classList.remove('active');
-        document.body.style.overflow = '';
+            console.log('Click en link');
+            menuToggle.classList.remove('active');
+            navMenu.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
         });
     });
-
+    
+    // Resize
     window.addEventListener('resize', function() {
         if (window.innerWidth > 768) {
-        menuToggle.classList.remove('active');
-        navMenu.classList.remove('active');
-        overlay.classList.remove('active');
-        document.body.style.overflow = '';
+            menuToggle.classList.remove('active');
+            navMenu.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
         }
     });
-    });
-    </script>
+});
+</script>
+
 </body>
 </html>
