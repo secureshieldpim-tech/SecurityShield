@@ -306,7 +306,12 @@ body {
 
 .cta-section h2 {
     font-size: 2.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.cta-section p {
+    margin-bottom: 2rem;
+    font-size: 1.2rem;
 }
 
 /* Pricing Section */
