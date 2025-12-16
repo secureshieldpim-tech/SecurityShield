@@ -26,7 +26,7 @@
                 <li><a href="index.html">Inicio</a></li>
                 <li><a href="suscripcion.html">Planes</a></li>
                 <li><a href="contacto.html" class="active">Contacto</a></li>
-                <li><a href="login.html" class="active" id="loginLink">Iniciar Sesión</a></li>
+                <li><a href="login.html" id="loginLink">Iniciar Sesión</a></li>
                 <li><a href="#" id="logoutLink" class="logout-link" style="display:none">Cerrar Sesión</a></li>
             </ul>
         </div>
@@ -216,88 +216,19 @@
     <script>
         function checkSession() {
             const user = JSON.parse(localStorage.getItem('secureshield_user') || 'null');
-            const loginLink = document.getElementById('loginLink');
-            const logoutLink = document.getElementById('logoutLink');
+            const loginLi = document.querySelector('#loginLink').parentElement;
+            const logoutLi = document.querySelector('#logoutLink').parentElement;
             
             if (user) {
-                if (loginLink) loginLink.style.display = 'none';
-                if (logoutLink) {
-                    logoutLink.style.display = 'block';
-                    logoutLink.textContent = `Cerrar Sesión (${user.nombre})`;
-                }
-                
-                document.getElementById('nombre').value = user.nombre || '';
-                document.getElementById('email').value = user.email || '';
+                loginLi.style.display = 'none';
+                logoutLi.style.display = 'block';
+                document.getElementById('logoutLink').textContent = `Cerrar Sesión (${user.nombre})`;
+            } else {
+                loginLi.style.display = 'block';
+                logoutLi.style.display = 'none';
             }
         }
 
-        document.getElementById('logoutLink')?.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
-                localStorage.removeItem('secureshield_user');
-                window.location.href = 'index.html';
-            }
-        });
-
-        document.getElementById('contactForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const formData = new FormData(e.target);
-            const successDiv = document.getElementById('contactSuccess');
-            const errorDiv = document.getElementById('contactError');
-            
-            successDiv.style.display = 'none';
-            errorDiv.style.display = 'none';
-            
-            const submitButton = e.target.querySelector('button[type="submit"]');
-            submitButton.disabled = true;
-            submitButton.textContent = 'Enviando...';
-            
-            try {
-                const response = await fetch('/', {
-                    method: 'POST',
-                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                    body: new URLSearchParams(formData).toString()
-                });
-                
-                if (response.ok) {
-                    successDiv.innerHTML = `
-                        <strong>✅ ¡Mensaje enviado con éxito!</strong><br>
-                        Gracias por contactarnos, ${formData.get('nombre')}. Hemos recibido tu mensaje y te responderemos en breve a ${formData.get('email')}.
-                    `;
-                    successDiv.style.display = 'block';
-                    e.target.reset();
-                    successDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                } else {
-                    throw new Error('Error al enviar');
-                }
-            } catch (error) {
-                errorDiv.innerHTML = `
-                    <strong>❌ Error al enviar el mensaje</strong><br>
-                    Por favor, intenta de nuevo o envíanos un email directamente a: 
-                    <a href="mailto:secureshield.pim@gmail.com" style="color: var(--primary-color);">secureshield.pim@gmail.com</a>
-                `;
-                errorDiv.style.display = 'block';
-                errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = 'Enviar Mensaje';
-            }
-        });
-
-        function checkResponsive() {
-            const container = document.querySelector('.auth-section .container > div');
-            if (container) {
-                if (window.innerWidth <= 768) {
-                    container.style.gridTemplateColumns = '1fr';
-                } else {
-                    container.style.gridTemplateColumns = '1fr 1fr';
-                }
-            }
-        }
-
-        window.addEventListener('resize', checkResponsive);
-        checkResponsive();
         checkSession();
     </script>
     <script src="mobile-menu.js"></script>

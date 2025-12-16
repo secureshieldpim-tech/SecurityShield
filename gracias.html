@@ -121,25 +121,18 @@
     <script>
         function checkSession() {
             const user = JSON.parse(localStorage.getItem('secureshield_user') || 'null');
-            const loginLink = document.getElementById('loginLink');
-            const logoutLink = document.getElementById('logoutLink');
+            const loginLi = document.querySelector('#loginLink').parentElement;
+            const logoutLi = document.querySelector('#logoutLink').parentElement;
             
             if (user) {
-                if (loginLink) loginLink.style.display = 'none';
-                if (logoutLink) {
-                    logoutLink.style.display = 'block';
-                    logoutLink.textContent = `Cerrar Sesión (${user.nombre})`;
-                }
+                loginLi.style.display = 'none';
+                logoutLi.style.display = 'block';
+                document.getElementById('logoutLink').textContent = `Cerrar Sesión (${user.nombre})`;
+            } else {
+                loginLi.style.display = 'block';
+                logoutLi.style.display = 'none';
             }
         }
-
-        document.getElementById('logoutLink')?.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
-                localStorage.removeItem('secureshield_user');
-                window.location.href = 'index.html';
-            }
-        });
 
         checkSession();
     </script>

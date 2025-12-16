@@ -879,82 +879,70 @@ html {
 }
 
 @media (max-width: 768px) {
-    /* MENÚ MÓVIL ACTIVO */
+    /* Mostrar hamburguesa */
     .mobile-menu-toggle {
         display: flex !important;
     }
     
-    /* Fondo del menú más claro */
+    /* Menú fuera de pantalla */
     .nav-menu {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        width: 80%;
-        max-width: 300px;
-        height: 100vh;
-        background: linear-gradient(180deg, #1e2a5e 0%, #0f1736 100%) !important;
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: stretch;
-        padding: 80px 0 20px;
-        gap: 0;
-        margin: 0;
-        transition: right 0.3s ease;
-        box-shadow: -5px 0 30px rgba(0, 217, 255, 0.5);
-        overflow-y: auto;
-        z-index: 999;
-        border-left: 3px solid var(--primary-color);
+        position: fixed !important;
+        top: 0 !important;
+        right: -100% !important;
+        width: 80% !important;
+        max-width: 300px !important;
+        height: 100vh !important;
+        background: #0d1428 !important;
+        flex-direction: column !important;
+        padding: 70px 0 20px !important;
+        gap: 0 !important;
+        margin: 0 !important;
+        transition: right 0.3s ease !important;
+        z-index: 1001 !important;
+        border-left: 2px solid var(--primary-color) !important;
     }
     
+    /* Menú ABIERTO */
     .nav-menu.active {
-        right: 0;
+        right: 0 !important;
     }
     
+    /* Items del menú */
     .nav-menu li {
-        width: 100%;
-        margin: 0;
-        list-style: none;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        display: block !important;
     }
     
-    /* Enlaces BLANCOS y VISIBLES */
+    /* Enlaces */
     .nav-menu li a {
         display: block !important;
         width: 100% !important;
-        padding: 1.2rem 2rem !important;
-        border-radius: 0 !important;
-        text-align: left !important;
-        border: none !important;
-        border-bottom: 1px solid rgba(0, 217, 255, 0.2) !important;
-        color: #ffffff !important;
-        background-color: transparent !important;
-        font-size: 1.1rem !important;
-        font-weight: 500 !important;
-        transition: all 0.3s ease !important;
+        padding: 1.2rem 1.5rem !important;
+        color: #fff !important;
+        font-size: 1rem !important;
+        border-bottom: 1px solid rgba(0,217,255,0.1) !important;
         text-decoration: none !important;
+        background: transparent !important;
+        border-radius: 0 !important;
     }
     
     .nav-menu li a:hover {
-        background: linear-gradient(90deg, rgba(0, 217, 255, 0.25) 0%, transparent 100%) !important;
-        color: var(--primary-color) !important;
-        padding-left: 2.5rem !important;
+        background: rgba(0,217,255,0.15) !important;
+        padding-left: 2rem !important;
     }
     
     .nav-menu li a.active {
-        background: linear-gradient(90deg, rgba(0, 217, 255, 0.35) 0%, transparent 100%) !important;
-        color: var(--primary-color) !important;
-        border-left: 4px solid var(--primary-color) !important;
-        font-weight: 600 !important;
+        background: rgba(0,217,255,0.25) !important;
+        border-left: 3px solid var(--primary-color) !important;
     }
     
-    .nav-menu li a.logout-link {
+    .logout-link {
         color: #ff6b6b !important;
     }
     
-    .nav-menu li a.logout-link:hover {
-        background: linear-gradient(90deg, rgba(255, 107, 107, 0.2) 0%, transparent 100%) !important;
-        color: #ff6b6b !important;
-    }
-    
+    /* Animación hamburguesa */
     .mobile-menu-toggle.active span:nth-child(1) {
         transform: rotate(45deg) translate(8px, 8px);
     }
@@ -967,119 +955,56 @@ html {
         transform: rotate(-45deg) translate(7px, -7px);
     }
     
-    /* HERO RESPONSIVE */
+    /* Resto de responsive */
     .hero {
-        padding: 4rem 1.5rem;
-    }
-    
-    .hero::after {
-        display: none;
+        padding: 3rem 1rem;
     }
     
     .hero h1 {
-        font-size: 2rem;
-        line-height: 1.3;
-    }
-
-    .subtitle {
-        font-size: 1.1rem;
-    }
-    
-    .pricing-hero h1 {
         font-size: 1.8rem;
     }
     
-    .services h2,
-    .why-us h2,
-    .methodology h2,
-    .cta-section h2,
-    .pricing h2 {
-        font-size: 2rem;
-    }
-    
-    .service-icon {
-        font-size: 3rem !important;
+    .subtitle {
+        font-size: 1rem;
     }
     
     .service-grid,
     .features,
-    .steps,
-    .included-grid,
-    .faq-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-    
     .pricing-grid {
         grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-    
-    .auth-container {
-        grid-template-columns: 1fr;
-    }
-    
-    .feature:hover {
-        transform: translateX(0);
-    }
-    
-    .cta-button,
-    .auth-button,
-    .plan-button {
-        padding: 1.2rem 2rem;
-        font-size: 1rem;
-        min-height: 52px;
     }
     
     .services,
     .why-us,
-    .methodology,
     .pricing {
-        padding: 4rem 1.5rem;
+        padding: 3rem 1rem;
     }
     
-    .cta-section {
-        padding: 3rem 1.5rem;
-    }
-    
-    .action-buttons {
-        flex-direction: column;
-    }
-    
-    .action-buttons a {
-        width: 100%;
-        text-align: center;
-    }
-    
-    .pricing-card {
-        padding: 3rem 1.5rem 2rem 1.5rem;
-    }
-
-    .badge {
-        top: -12px;
-        font-size: 0.7rem;
-        padding: 0.4rem 1rem;
-        white-space: nowrap;
-    }
-    
-    .amount {
-        font-size: 2.8rem;
-    }
-    
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-        font-size: 16px;
-    }
-    
-    .service-card:hover {
-        transform: translateY(-5px);
-    }
-    
-    /* Quitar animaciones en móvil */
-    .service-card, .feature, .pricing-card, .step, .included-item, .faq-item {
+    * {
         animation: none !important;
-        opacity: 1 !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero h1 {
+        font-size: 1.5rem;
+    }
+    
+    .logo-text {
+        font-size: 1.1rem;
+    }
+    
+    .shield-icon {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .nav-menu {
+        width: 85%;
+    }
+    
+    .container {
+        padding: 0 1rem;
     }
 }
 
@@ -1123,5 +1048,16 @@ html {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
+    }
+}
+
+/* FIX DISPLAY MENU ITEMS */
+.nav-menu li {
+    display: block !important;
+}
+
+@media (min-width: 769px) {
+    .nav-menu li {
+        display: inline-block !important;
     }
 }
