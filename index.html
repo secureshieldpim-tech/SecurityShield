@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SecurityShield - Endurecimiento de Servidores Web</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <link rel="icon" href="images/favicon.png">
 </head>
 <body>
@@ -16,7 +15,6 @@
                 <span class="logo-text">SecurityShield</span>
             </div>
             
-            <!-- Botón hamburguesa -->
             <button class="mobile-menu-toggle" id="menuToggle" aria-label="Menú">
                 <span></span>
                 <span></span>
@@ -33,7 +31,6 @@
         </div>
     </nav>
 
-    <!-- Overlay -->
     <div class="nav-overlay" id="navOverlay"></div>
 
     <header class="hero">
@@ -147,49 +144,42 @@
         </div>
     </footer>
 
+    <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+    <script src="auth-config.js"></script>
+    <script src="mobile-menu.js"></script>
     <script>
-        netlifyIdentity.init();
-
-        function updateUI() {
-            const user = netlifyIdentity.currentUser();
+        // Lógica para actualizar la barra de navegación en index
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Inicializamos Auth0
+            await initAuth0();
+            
+            // Verificamos si hay usuario
+            const user = await getUser();
             const loginLink = document.getElementById('loginLink');
             const logoutLink = document.getElementById('logoutLink');
             
             if (user) {
+                // Usuario logueado
                 if (loginLink) loginLink.style.display = 'none';
                 if (logoutLink) {
                     logoutLink.style.display = 'block';
-                    const displayName = user.user_metadata?.full_name || user.email.split('@')[0];
+                    const displayName = user.name || user.email.split('@')[0];
                     logoutLink.textContent = `Cerrar Sesión (${displayName})`;
+                    
+                    // Manejar cierre de sesión
+                    logoutLink.addEventListener('click', async (e) => {
+                        e.preventDefault();
+                        if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
+                            await logout();
+                        }
+                    });
                 }
-                
-                const userData = {
-                    email: user.email,
-                    nombre: user.user_metadata?.full_name || user.email.split('@')[0],
-                    id: user.id
-                };
-                localStorage.setItem('secureshield_user', JSON.stringify(userData));
             } else {
+                // Usuario no logueado
                 if (loginLink) loginLink.style.display = 'block';
                 if (logoutLink) logoutLink.style.display = 'none';
-                localStorage.removeItem('secureshield_user');
-            }
-        }
-
-        netlifyIdentity.on('init', updateUI);
-        netlifyIdentity.on('login', updateUI);
-        netlifyIdentity.on('logout', updateUI);
-
-        document.getElementById('logoutLink')?.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
-                netlifyIdentity.logout();
             }
         });
-
-        updateUI();
     </script>
-    <script src="mobile-menu.js"></script>
-
 </body>
 </html>

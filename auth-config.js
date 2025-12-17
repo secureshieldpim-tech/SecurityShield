@@ -1,6 +1,6 @@
 const AUTH0_CONFIG = {
     domain: 'dev-h2ejq43vrbo7ej3o.us.auth0.com',
-    clientId: 'oHKhxOc6G1CxVPV0QYnROzxoY4ppZUQS',
+    clientId: '3PFB0yf1HGUbB7gLksQmu7jtdf4ubj6P',
     authorizationParams: {
         redirect_uri: window.location.origin + '/callback.html'
     }
