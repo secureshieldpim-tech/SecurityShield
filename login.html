@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión - SecurityShield</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <link rel="icon" href="images/favicon.png">
     <style>
         .identity-container {
@@ -65,6 +64,17 @@
             border-radius: 15px;
             margin-bottom: 2rem;
         }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+            color: var(--primary-color);
+        }
+
+        .loading.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -75,7 +85,6 @@
                 <span class="logo-text">SecurityShield</span>
             </div>
             
-            <!-- Botón hamburguesa -->
             <button class="mobile-menu-toggle" id="menuToggle" aria-label="Menú">
                 <span></span>
                 <span></span>
@@ -86,19 +95,24 @@
                 <li><a href="index.html">Inicio</a></li>
                 <li><a href="suscripcion.html">Planes</a></li>
                 <li><a href="contacto.html">Contacto</a></li>
-                <li><a href="login.html" class="active" id="loginLink" class="active">Iniciar Sesión</a></li>
+                <li><a href="login.html" class="active">Iniciar Sesión</a></li>
                 <li><a href="#" id="logoutLink" class="logout-link" style="display:none">Cerrar Sesión</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- Overlay -->
     <div class="nav-overlay" id="navOverlay"></div>
 
     <section class="auth-section">
         <div class="container">
+            <!-- Loading -->
+            <div class="loading" id="loading">
+                <h2>Cargando...</h2>
+                <p>Verificando sesión...</p>
+            </div>
+
             <!-- Vista cuando NO hay usuario logueado -->
-            <div id="loginView" class="identity-container">
+            <div id="loginView" class="identity-container" style="display:none;">
                 <div id="planNotice" style="display:none;" class="plan-notice">
                     <p>📦 Has seleccionado el plan: <strong id="selectedPlan"></strong></p>
                     <p>Inicia sesión o crea una cuenta para continuar</p>
@@ -110,11 +124,11 @@
                         Inicia sesión para acceder a tu panel de control y gestionar tus servicios de seguridad
                     </p>
                     
-                    <button class="identity-button" onclick="netlifyIdentity.open('login')">
+                    <button class="identity-button" id="loginButton">
                         🔓 Iniciar Sesión
                     </button>
                     
-                    <button class="identity-button secondary" onclick="netlifyIdentity.open('signup')">
+                    <button class="identity-button secondary" id="signupButton">
                         ✨ Crear Cuenta Nueva
                     </button>
                     
@@ -136,8 +150,8 @@
                         🛡️ Seguridad de tu Cuenta
                     </h3>
                     <p style="color: var(--text-gray); font-size: 0.95rem;">
-                        Utilizamos <strong>Netlify Identity</strong>, un sistema de autenticación seguro y encriptado. 
-                        Tus credenciales están protegidas con los más altos estándares de seguridad.
+                        Utilizamos <strong>Auth0</strong>, el líder mundial en gestión de identidades. 
+                        Tus credenciales están protegidas con encriptación de nivel empresarial.
                     </p>
                 </div>
             </div>
@@ -152,15 +166,15 @@
                 <div class="identity-box">
                     <h2 style="margin-bottom: 2rem;">¿Qué deseas hacer?</h2>
                     
-                    <a href="contacto.html" class="identity-button" style="text-decoration: none;">
+                    <a href="contacto.html" class="identity-button" style="text-decoration: none; line-height: 1.2rem;">
                         📧 Contactar con Nosotros
                     </a>
                     
-                    <a href="suscripcion.html" class="identity-button secondary" style="text-decoration: none;">
+                    <a href="suscripcion.html" class="identity-button secondary" style="text-decoration: none; line-height: 1.2rem;">
                         📦 Ver Planes
                     </a>
                     
-                    <button class="identity-button secondary" onclick="handleLogout()" style="margin-top: 2rem; background-color: var(--danger); border-color: var(--danger);">
+                    <button class="identity-button secondary" id="logoutButton" style="margin-top: 2rem; background-color: var(--danger); border-color: var(--danger);">
                         🚪 Cerrar Sesión
                     </button>
                 </div>
@@ -199,73 +213,9 @@
         </div>
     </footer>
 
-    <script>
-        netlifyIdentity.init();
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const plan = urlParams.get('plan');
-        
-        if (plan) {
-            document.getElementById('planNotice').style.display = 'block';
-            document.getElementById('selectedPlan').textContent = plan;
-            sessionStorage.setItem('selected_plan', plan);
-        }
-
-        function updateUI() {
-            const user = netlifyIdentity.currentUser();
-            const loginView = document.getElementById('loginView');
-            const userView = document.getElementById('userView');
-            
-            if (user) {
-                loginView.style.display = 'none';
-                userView.style.display = 'block';
-                document.getElementById('userEmail').textContent = user.email;
-                
-                const userData = {
-                    email: user.email,
-                    nombre: user.user_metadata?.full_name || user.email.split('@')[0],
-                    id: user.id,
-                    fecha_registro: user.created_at
-                };
-                localStorage.setItem('secureshield_user', JSON.stringify(userData));
-                
-                const selectedPlan = sessionStorage.getItem('selected_plan');
-                if (selectedPlan) {
-                    setTimeout(() => {
-                        sessionStorage.removeItem('selected_plan');
-                        window.location.href = `confirmacion.html?plan=${selectedPlan}`;
-                    }, 1000);
-                }
-            } else {
-                loginView.style.display = 'block';
-                userView.style.display = 'none';
-                localStorage.removeItem('secureshield_user');
-            }
-        }
-
-        function handleLogout() {
-            if (confirm('¿Estás seguro que deseas cerrar sesión?')) {
-                netlifyIdentity.logout();
-            }
-        }
-
-        netlifyIdentity.on('init', updateUI);
-        netlifyIdentity.on('login', user => {
-            netlifyIdentity.close();
-            updateUI();
-        });
-        netlifyIdentity.on('logout', () => {
-            updateUI();
-            window.location.href = 'index.html';
-        });
-        netlifyIdentity.on('signup', user => {
-            netlifyIdentity.close();
-            updateUI();
-        });
-
-        updateUI();
-    </script>
+    <!-- Auth0 SDK -->
+    <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+    <script src="auth-config.js"></script>
     <script src="mobile-menu.js"></script>
-
 </body>
 </html>
