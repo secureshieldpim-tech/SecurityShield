@@ -868,6 +868,11 @@ html {
 /* ============================================
    RESPONSIVE - MÓVIL (REEMPLAZAR DESDE LÍNEA 1017)
    ============================================ */
+/* ============================================
+   RESPONSIVE - MÓVIL CORREGIDO
+   ============================================ */
+
+/* Tablet */
 @media (max-width: 992px) {
     .pricing-grid {
         grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -878,71 +883,85 @@ html {
     }
 }
 
+/* Móvil */
 @media (max-width: 768px) {
-    /* Mostrar hamburguesa */
+    /* MOSTRAR botón hamburguesa */
     .mobile-menu-toggle {
-        display: flex !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        width: 30px;
+        height: 25px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        z-index: 1002;
+        position: relative;
     }
     
-    /* Menú fuera de pantalla */
+    /* Menú CERRADO - Fuera de pantalla */
     .nav-menu {
-        position: fixed !important;
-        top: 0 !important;
-        right: -100% !important;
-        width: 80% !important;
-        max-width: 300px !important;
-        height: 100vh !important;
-        background: #0d1428 !important;
-        flex-direction: column !important;
-        padding: 70px 0 20px !important;
-        gap: 0 !important;
-        margin: 0 !important;
-        transition: right 0.3s ease !important;
-        z-index: 1001 !important;
-        border-left: 2px solid var(--primary-color) !important;
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background: #0d1428;
+        flex-direction: column;
+        padding: 80px 0 20px;
+        gap: 0;
+        margin: 0;
+        transition: right 0.3s ease;
+        z-index: 1001;
+        border-left: 2px solid var(--primary-color);
+        overflow-y: auto;
     }
     
     /* Menú ABIERTO */
     .nav-menu.active {
-        right: 0 !important;
+        right: 0;
     }
     
-    /* Items del menú */
+    /* Items del menú - VISIBLES */
     .nav-menu li {
-        width: 100% !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        display: block !important;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        display: block;
+        list-style: none;
     }
     
-    /* Enlaces */
+    /* Enlaces - VISIBLES y con buen tamaño */
     .nav-menu li a {
-        display: block !important;
-        width: 100% !important;
-        padding: 1.2rem 1.5rem !important;
-        color: #fff !important;
-        font-size: 1rem !important;
-        border-bottom: 1px solid rgba(0,217,255,0.1) !important;
-        text-decoration: none !important;
-        background: transparent !important;
-        border-radius: 0 !important;
+        display: block;
+        width: 100%;
+        padding: 1.2rem 1.5rem;
+        color: #fff;
+        font-size: 1.1rem;
+        border-bottom: 1px solid rgba(0,217,255,0.1);
+        text-decoration: none;
+        background: transparent;
+        border-radius: 0;
+        transition: all 0.3s ease;
     }
     
     .nav-menu li a:hover {
-        background: rgba(0,217,255,0.15) !important;
-        padding-left: 2rem !important;
+        background: rgba(0,217,255,0.15);
+        padding-left: 2rem;
     }
     
     .nav-menu li a.active {
-        background: rgba(0,217,255,0.25) !important;
-        border-left: 3px solid var(--primary-color) !important;
+        background: rgba(0,217,255,0.25);
+        border-left: 3px solid var(--primary-color);
     }
     
     .logout-link {
-        color: #ff6b6b !important;
+        color: #ff6b6b;
     }
     
-    /* Animación hamburguesa */
+    /* Animación hamburguesa a X */
     .mobile-menu-toggle.active span:nth-child(1) {
         transform: rotate(45deg) translate(8px, 8px);
     }
@@ -955,7 +974,12 @@ html {
         transform: rotate(-45deg) translate(7px, -7px);
     }
     
-    /* Resto de responsive */
+    /* Evitar scroll cuando menú abierto */
+    body.menu-open {
+        overflow: hidden;
+    }
+    
+    /* Hero más pequeño */
     .hero {
         padding: 3rem 1rem;
     }
@@ -968,23 +992,41 @@ html {
         font-size: 1rem;
     }
     
+    /* Grids a 1 columna */
     .service-grid,
     .features,
-    .pricing-grid {
+    .pricing-grid,
+    .included-grid,
+    .faq-grid,
+    .steps {
         grid-template-columns: 1fr;
     }
     
+    /* Padding reducido */
     .services,
     .why-us,
-    .pricing {
+    .pricing,
+    .methodology,
+    .services-included,
+    .faq {
         padding: 3rem 1rem;
     }
     
-    * {
-        animation: none !important;
+    /* Títulos más pequeños */
+    h2 {
+        font-size: 2rem;
+    }
+    
+    /* Botones más grandes para touch */
+    .cta-button,
+    .plan-button,
+    .auth-button {
+        min-height: 48px;
+        font-size: 1rem;
     }
 }
 
+/* Móvil pequeño */
 @media (max-width: 480px) {
     .hero h1 {
         font-size: 1.5rem;
@@ -1003,35 +1045,12 @@ html {
         width: 85%;
     }
     
-    .container {
-        padding: 0 1rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .hero h1 {
+    .pricing-hero h1 {
         font-size: 1.75rem;
     }
     
-    .logo-text {
-        font-size: 1.2rem;
-    }
-    
-    .shield-icon {
-        width: 35px;
-        height: 35px;
-    }
-    
-    .pricing-hero h1 {
-        font-size: 1.5rem;
-    }
-    
-    .nav-menu {
-        width: 85%;
-    }
-    
     .container {
-        padding: 0 15px;
+        padding: 0 1rem;
     }
     
     .auth-box,
@@ -1039,8 +1058,30 @@ html {
     .success-confirmation {
         padding: 1.5rem 1rem;
     }
+    
+    /* Grids de auth a 1 columna */
+    .auth-container {
+        grid-template-columns: 1fr;
+    }
 }
 
+/* Reducir animaciones en móvil para performance */
+@media (max-width: 768px) {
+    .service-card,
+    .feature,
+    .pricing-card,
+    .step,
+    .included-item,
+    .faq-item {
+        animation-duration: 0.3s;
+    }
+    
+    body::before {
+        animation: none;
+    }
+}
+
+/* Accesibilidad - Reducir movimiento */
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -1048,16 +1089,5 @@ html {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
-    }
-}
-
-/* FIX DISPLAY MENU ITEMS */
-.nav-menu li {
-    display: block !important;
-}
-
-@media (min-width: 769px) {
-    .nav-menu li {
-        display: inline-block !important;
     }
 }
