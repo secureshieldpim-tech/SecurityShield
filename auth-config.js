@@ -1,12 +1,19 @@
+// ==========================================
+// CONFIGURACIÓN DE AUTH0
+// ==========================================
 const AUTH0_CONFIG = {
     domain: 'dev-h2ejq43vrbo7ej3o.us.auth0.com',
-    clientId: 'oHKhxOc6G1CxVPV0QYnROzxoY4ppZUQS',
+    clientId: '3PFB0yf1HGUbB7gLksQmu7jtdf4ubj6P',
     authorizationParams: {
         redirect_uri: window.location.origin + '/callback.html'
     }
 };
 
 let auth0Client = null;
+
+// ==========================================
+// FUNCIONES DEL SISTEMA
+// ==========================================
 
 async function initAuth0() {
     try {
@@ -20,7 +27,7 @@ async function initAuth0() {
         });
         return true;
     } catch (error) {
-        console.error(error);
+        console.error("Error crítico Auth0:", error);
         return false;
     }
 }
@@ -33,7 +40,8 @@ async function login() {
             }
         });
     } catch (error) {
-        console.error(error);
+        console.error("Login error:", error);
+        alert("No se pudo conectar con el servidor de autenticación.");
     }
 }
 
@@ -46,7 +54,7 @@ async function signup() {
             }
         });
     } catch (error) {
-        console.error(error);
+        console.error("Signup error:", error);
     }
 }
 
@@ -59,98 +67,118 @@ async function logout() {
         });
         localStorage.removeItem('secureshield_user');
     } catch (error) {
-        console.error(error);
+        console.error("Logout error:", error);
+        localStorage.removeItem('secureshield_user');
+        window.location.href = 'index.html';
     }
 }
 
 async function getUser() {
     try {
+        if (!auth0Client) return null;
         const isAuthenticated = await auth0Client.isAuthenticated();
         if (isAuthenticated) {
             return await auth0Client.getUser();
         }
         return null;
     } catch (error) {
-        console.error(error);
         return null;
     }
 }
 
+// Función principal que controla qué se muestra en la pantalla
 async function updateUI() {
     const loading = document.getElementById('loading');
     const loginView = document.getElementById('loginView');
     const userView = document.getElementById('userView');
     const logoutLinkNav = document.getElementById('logoutLink');
+    const loginLinkNav = document.getElementById('loginLink'); // Referencia al link "Iniciar Sesión" del menú
     
-    if (loading) loading.classList.add('active');
-    
+    // 1. Intentamos obtener usuario (puede ser null si no está logueado)
+    let user = null;
     try {
-        const user = await getUser();
+        user = await getUser();
+    } catch (e) { console.error(e); }
+
+    // 2. Quitamos el cargando siempre
+    if (loading) {
+        loading.style.display = 'none'; 
+        loading.classList.remove('active');
+    }
+    
+    // 3. Lógica de visualización
+    if (user) {
+        // --- USUARIO LOGUEADO ---
+        console.log("Usuario detectado:", user.email);
         
-        if (user) {
-            if (loginView) loginView.style.display = 'none';
-            if (userView) userView.style.display = 'block';
-            if (loading) loading.classList.remove('active');
-            
-            const userEmailEl = document.getElementById('userEmail');
-            if (userEmailEl) userEmailEl.textContent = user.email;
-            
-            if (logoutLinkNav) {
-                logoutLinkNav.style.display = 'block';
-                logoutLinkNav.textContent = 'Cerrar Sesion (' + (user.name || user.email.split('@')[0]) + ')';
-            }
-            
-            const userData = {
-                email: user.email,
-                nombre: user.name || user.email.split('@')[0],
-                id: user.sub,
-                picture: user.picture
-            };
-            localStorage.setItem('secureshield_user', JSON.stringify(userData));
-            
-            const selectedPlan = sessionStorage.getItem('selected_plan');
-            if (selectedPlan && window.location.pathname.includes('login.html')) {
-                setTimeout(() => {
-                    sessionStorage.removeItem('selected_plan');
-                    window.location.href = 'confirmacion.html?plan=' + selectedPlan;
-                }, 1000);
-            }
-        } else {
-            if (loginView) loginView.style.display = 'block';
-            if (userView) userView.style.display = 'none';
-            if (loading) loading.classList.remove('active');
-            
-            if (logoutLinkNav) logoutLinkNav.style.display = 'none';
-            localStorage.removeItem('secureshield_user');
+        // Si estamos en la página de login, ocultamos el formulario y mostramos el panel de usuario
+        if (loginView) loginView.style.display = 'none';
+        if (userView) userView.style.display = 'block';
+        
+        // Actualizamos datos en la interfaz
+        const userEmailEl = document.getElementById('userEmail');
+        if (userEmailEl) userEmailEl.textContent = user.email;
+        
+        // Actualizamos el menú de navegación (Navbar)
+        if (logoutLinkNav) {
+            logoutLinkNav.style.display = 'block';
+            const displayName = user.name || user.email.split('@')[0];
+            logoutLinkNav.textContent = `Cerrar Sesión (${displayName})`;
         }
-    } catch (error) {
-        if (loading) loading.classList.remove('active');
+        if (loginLinkNav) loginLinkNav.style.display = 'none'; // Ocultar "Iniciar Sesión" en el menú
+        
+        // Guardamos copia local de seguridad
+        const userData = {
+            email: user.email,
+            nombre: user.name || user.email.split('@')[0],
+            id: user.sub,
+            picture: user.picture
+        };
+        localStorage.setItem('secureshield_user', JSON.stringify(userData));
+
+        // Redirección post-login si hay plan pendiente
+        const selectedPlan = sessionStorage.getItem('selected_plan');
+        if (selectedPlan && loginView) { // Solo redirigir si estábamos en la página de login
+            setTimeout(() => {
+                sessionStorage.removeItem('selected_plan');
+                window.location.href = 'confirmacion.html?plan=' + selectedPlan;
+            }, 500);
+        }
+
+    } else {
+        // --- USUARIO NO LOGUEADO (Visitante) ---
+        console.log("No hay usuario activo");
+        
+        // Si estamos en la página de login, mostramos el formulario
         if (loginView) loginView.style.display = 'block';
+        if (userView) userView.style.display = 'none';
+        
+        // Menú de navegación
+        if (logoutLinkNav) logoutLinkNav.style.display = 'none';
+        if (loginLinkNav) loginLinkNav.style.display = 'block';
+        
+        localStorage.removeItem('secureshield_user');
     }
 }
 
-// REEMPLAZA DESDE "document.addEventListener..." HASTA EL FINAL DEL ARCHIVO auth-config.js
+// ==========================================
+// INICIALIZACIÓN
+// ==========================================
 
 document.addEventListener('DOMContentLoaded', async function() {
-    // Intentamos iniciar Auth0
+    // 1. Inicializar Auth0
     const initialized = await initAuth0();
-    
-    // CORRECCIÓN: Si falla la conexión (por dominios no permitidos, etc.),
-    // forzamos que se muestre la vista de login para que la web no quede en blanco.
-    if (!initialized) {
-        console.warn('No se pudo conectar con Auth0. Mostrando vista offline/login.');
-        const loading = document.getElementById('loading');
-        const loginView = document.getElementById('loginView');
-        if (loading) loading.style.display = 'none'; // Quitar cargando
-        if (loginView) loginView.style.display = 'block'; // Mostrar login
-        // No hacemos return para permitir que el resto de botones funcionen (aunque den error al clicar)
-    }
-    
-    // Lógica para detectar si venimos redirigidos (callback) o si es una carga normal
-    if (window.location.pathname.includes('login.html')) {
+
+    // 2. Comprobar si estamos en la página de LOGIN mirando si existen sus elementos
+    // (Esto arregla el error de que no funcione en URLs sin .html)
+    const isLoginPage = document.getElementById('loginView') !== null;
+
+    if (isLoginPage) {
+        // Estamos en login.html (o /login)
+        
+        // Manejo de parámetros URL (planes)
         const urlParams = new URLSearchParams(window.location.search);
         const plan = urlParams.get('plan');
-        
         if (plan) {
             const planNotice = document.getElementById('planNotice');
             const selectedPlanEl = document.getElementById('selectedPlan');
@@ -159,6 +187,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             sessionStorage.setItem('selected_plan', plan);
         }
         
+        // Listeners de botones
         const loginButton = document.getElementById('loginButton');
         const signupButton = document.getElementById('signupButton');
         const logoutButton = document.getElementById('logoutButton');
@@ -170,12 +199,20 @@ document.addEventListener('DOMContentLoaded', async function() {
                 if (confirm('¿Estás seguro que deseas cerrar sesión?')) logout();
             });
         }
-        
-        // Solo intentamos actualizar la UI si la inicialización fue correcta o si queremos comprobar estado
-        await updateUI();
+
+        // Si falló la inicialización de Auth0, forzamos mostrar la interfaz
+        // para que no se quede la pantalla en blanco
+        if (!initialized) {
+            console.warn("Forzando UI por fallo de inicialización");
+            const loading = document.getElementById('loading');
+            const loginView = document.getElementById('loginView');
+            if (loading) loading.style.display = 'none';
+            if (loginView) loginView.style.display = 'block';
+            return; // Salimos para no intentar llamar a Auth0
+        }
     }
-    
-    // Lógica para el botón de cerrar sesión del menú de navegación
+
+    // 3. Listener global para el botón de logout del menú (existe en todas las páginas)
     const logoutLinkNav = document.getElementById('logoutLink');
     if (logoutLinkNav) {
         logoutLinkNav.addEventListener('click', async function(e) {
@@ -183,18 +220,9 @@ document.addEventListener('DOMContentLoaded', async function() {
             if (confirm('¿Estás seguro que deseas cerrar sesión?')) await logout();
         });
     }
-    
-    // Chequeo de sesión para otras páginas que no son login.html
-    if (!window.location.pathname.includes('login.html')) {
-        try {
-            const user = await getUser();
-            if (user && logoutLinkNav) {
-                logoutLinkNav.style.display = 'block';
-                const nombreMostrar = user.name || user.email.split('@')[0];
-                logoutLinkNav.textContent = 'Cerrar Sesión (' + nombreMostrar + ')';
-            }
-        } catch (error) {
-            console.error(error);
-        }
+
+    // 4. Finalmente, actualizamos la interfaz
+    if (initialized) {
+        await updateUI();
     }
 });
