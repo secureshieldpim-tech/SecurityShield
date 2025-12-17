@@ -1,6 +1,6 @@
 const AUTH0_CONFIG = {
     domain: 'dev-h2ejq43vrbo7ej3o.us.auth0.com',
-    clientId: '3PFB0yf1HGUbB7gLksQmu7jtdf4ubj6P',
+    clientId: 'oHKhxOc6G1CxVPV0QYnROzxoY4ppZUQS',
     authorizationParams: {
         redirect_uri: window.location.origin + '/callback.html'
     }
@@ -129,10 +129,24 @@ async function updateUI() {
     }
 }
 
+// REEMPLAZA DESDE "document.addEventListener..." HASTA EL FINAL DEL ARCHIVO auth-config.js
+
 document.addEventListener('DOMContentLoaded', async function() {
+    // Intentamos iniciar Auth0
     const initialized = await initAuth0();
-    if (!initialized) return;
     
+    // CORRECCIÓN: Si falla la conexión (por dominios no permitidos, etc.),
+    // forzamos que se muestre la vista de login para que la web no quede en blanco.
+    if (!initialized) {
+        console.warn('No se pudo conectar con Auth0. Mostrando vista offline/login.');
+        const loading = document.getElementById('loading');
+        const loginView = document.getElementById('loginView');
+        if (loading) loading.style.display = 'none'; // Quitar cargando
+        if (loginView) loginView.style.display = 'block'; // Mostrar login
+        // No hacemos return para permitir que el resto de botones funcionen (aunque den error al clicar)
+    }
+    
+    // Lógica para detectar si venimos redirigidos (callback) o si es una carga normal
     if (window.location.pathname.includes('login.html')) {
         const urlParams = new URLSearchParams(window.location.search);
         const plan = urlParams.get('plan');
@@ -153,28 +167,34 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (signupButton) signupButton.addEventListener('click', signup);
         if (logoutButton) {
             logoutButton.addEventListener('click', () => {
-                if (confirm('¿Estas seguro que deseas cerrar sesion?')) logout();
+                if (confirm('¿Estás seguro que deseas cerrar sesión?')) logout();
             });
         }
         
+        // Solo intentamos actualizar la UI si la inicialización fue correcta o si queremos comprobar estado
         await updateUI();
     }
     
+    // Lógica para el botón de cerrar sesión del menú de navegación
     const logoutLinkNav = document.getElementById('logoutLink');
     if (logoutLinkNav) {
         logoutLinkNav.addEventListener('click', async function(e) {
             e.preventDefault();
-            if (confirm('¿Estas seguro que deseas cerrar sesion?')) await logout();
+            if (confirm('¿Estás seguro que deseas cerrar sesión?')) await logout();
         });
     }
     
+    // Chequeo de sesión para otras páginas que no son login.html
     if (!window.location.pathname.includes('login.html')) {
         try {
             const user = await getUser();
             if (user && logoutLinkNav) {
                 logoutLinkNav.style.display = 'block';
-                logoutLinkNav.textContent = 'Cerrar Sesion (' + (user.name || user.email.split('@')[0]) + ')';
+                const nombreMostrar = user.name || user.email.split('@')[0];
+                logoutLinkNav.textContent = 'Cerrar Sesión (' + nombreMostrar + ')';
             }
-        } catch (error) {}
+        } catch (error) {
+            console.error(error);
+        }
     }
 });
